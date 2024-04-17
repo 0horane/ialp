@@ -459,3 +459,46 @@ Monads: m a
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+https://wiki.haskell.org/Common_Misunderstandings#Indentation
+https://superuser.com/questions/466396/how-to-manage-gpg-keys-across-multiple-systems
+https://docs.haskellstack.org/en/stable/GUIDE/
+https://www.seas.upenn.edu/~cis1940/spring13/lectures/01-intro.html
+https://downloads.haskell.org/ghc/latest/docs/libraries/
+https://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system
+https://wiki.haskell.org/Performance/Strictness
+https://stackoverflow.com/questions/8237645/how-to-add-linux-executable-files-to-gitignore
+https://stackoverflow.com/questions/5711120/gitignore-binary-files-that-have-no-extension/19749478#19749478
+https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
+https://git-scm.com/book/en/v2/Customizing-Git-An-Example-Git-Enforced-Policy#_an_example_git_enforced_policy
