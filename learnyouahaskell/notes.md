@@ -455,21 +455,72 @@ Monads: m a
     (>>=) :: (Monad m) => m a -> (a -> m b) -> m b
     aka. applies functor to function that takes nnormal value and returns functor. 
 
+for maybe, it will take the valeu in just and apply it, otherwise nothing
+
+class Monad m where  
+    return :: a -> m a  
+    (>>=) :: m a -> (a -> m b) -> m b  
+    (>>) :: m a -> m b -> m b  
+    x >> y = x >>= \_ -> y  
+    fail :: String -> m a  
+    fail msg = error msg  
+
+return = pure
+>>= function application 
+>> 
+    ghci> Nothing >> Just 3  
+    Nothing  
+    ghci> Just 3 >> Just 4  
+    Just 4  
+    ghci> Just 3 >> Nothing  
+    Nothing
+fail
+
+this is all useful when a result depends on a previous one
+
+do is a shorthand for a monadic let, which would be a series of cchained monadic applications to lambda funcs used to assign values. 
+do 
+  x<- val
+  y <- val
+  just ...
+
+not using <- in do is equivalent to >>
+we can use pattern matching in do. 
+a failed pattern match calls fail. for maybe, fail _ = Nothing
+
+for lists, we can use this for better expressing non determinism. 
+
+(*) <$> [1,2,3] <*> [10,100,1000]
+>>= = concat (map f xs)
+like flatmap
 
 
 
+list comprehension is syntactic sugar for lists as monadplus. monadplus is 
+    class Monad m => MonadPlus m where  
+        mzero :: m a  
+        mplus :: m a -> m a -> m a
+    instance MonadPlus [] where  
+        mzero = []  
+        mplus = (++)
 
+like in monoids
+    guard :: (MonadPlus m) => Bool -> m ()  
+    guard True = return ()  
+    guard False = mzero
 
+guard True >> return "cool" == ["cool"]
+guard Fals3 >> return "cool" == []
+[1..50] >>= (\x -> guard ('7' `elem` show x) >> return x)
 
+monad laws:
+    left indenity: return x >>= f == f x
+    right identity: m >>= return == m
+    associativity: (m >>= f) >>= g == m>>= (\x -> f x >>= g)
 
+monadic composition f g = (\x g x >>= f)
 
-
-
-
-
-
-
-
+### More monads
 
 
 
@@ -502,3 +553,5 @@ https://stackoverflow.com/questions/8237645/how-to-add-linux-executable-files-to
 https://stackoverflow.com/questions/5711120/gitignore-binary-files-that-have-no-extension/19749478#19749478
 https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
 https://git-scm.com/book/en/v2/Customizing-Git-An-Example-Git-Enforced-Policy#_an_example_git_enforced_policy
+
+
