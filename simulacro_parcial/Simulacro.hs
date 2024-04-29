@@ -38,29 +38,31 @@ amigosDe persona ((p1,p2):rels)
 -}
 
 -- si no admite repeticiones, recordar que o hay amistad repetida ni tu8plas iguales
-amigosDe persona [] = persona:[]
+amigosDe persona [] = []
 amigosDe persona ((p1,p2):rels) 
     | persona == p1 = p2:amigosDe persona rels
     | persona == p2 = p1:amigosDe persona rels
     | otherwise = amigosDe persona rels
 
-
-
-
+longitud :: [String] -> Int
+longitud [] = 0
+longitud (x:xs) = 1 + longitud xs
 
 personaConMasAmigos :: [(String, String)] -> String
-personaConMasAmigos rels = masAmigosHastaAhora ("", 0) rels    
+personaConMasAmigos rels = personaConMasAmigosAux (personas rels) rels 
 
-masAmigosHastaAhora :: (String, Int) -> [(String, String)] -> String
-masAmigosHastaAhora (persona,_) [] = persona
-masAmigosHastaAhora (persona, cant) ((p2,p3):rels)
-    | cant >= cantP2 && cant >= cantP3 = masAmigosHastaAhora (persona, cant) (rels)
-    | cantP2 >= cant && cantP2 >= cantP3 = masAmigosHastaAhora (p2, cantP2) (rels)
-    | cantP3 >= cantP2 && cantP3 >= cant = masAmigosHastaAhora (p3, cantP3) (rels)
-    where cantP2 = cantidadDeAmigos p2 rels   
-          cantP3 = cantidadDeAmigos p3 rels
+personaConMasAmigosAux :: [String] -> [(String, String)] -> String
+personaConMasAmigosAux (personaMax:[]) _ = personaMax
+personaConMasAmigosAux (personaMax:persona:xs) rels
+    | longitud (amigosDe persona rels) > longitud(amigosDe personaMax rels) = personaConMasAmigosAux (persona:xs) rels
+    | otherwise = personaConMasAmigosAux (personaMax:xs) rels
 
 
+cantidadDeAmigos :: String ->  [(String, String)] -> Int
+cantidadDeAmigos _ [] = 0
+cantidadDeAmigos nombre ((p1,p2):rels)
+    | nombre == p1 || nombre == p2 = 1 + cantidadDeAmigos nombre rels
+    | otherwise = cantidadDeAmigos nombre rels
 
 {-
 personaConMasAmigos ((p1,p2):[]) = p1
@@ -75,11 +77,25 @@ personaConMasAmigos ((p1,p2):(p3,p4):rels)
           cantP4 = cantidadDeAmigos p4 rels   
 -}
 
+{-
 
-cantidadDeAmigos :: String ->  [(String, String)] -> Int
-cantidadDeAmigos _ [] = 0
-cantidadDeAmigos nombre ((p1,p2):rels)
-    | nombre == p1 || nombre == p2 = 1 + cantidadDeAmigos nombre rels
-    | otherwise = cantidadDeAmigos nombre rels
+personaConMasAmigos rels = masAmigosHastaAhora ("", 0) rels    
+
+masAmigosHastaAhora :: (String, Int) -> [(String, String)] -> String
+masAmigosHastaAhora (persona,_) [] = persona
+masAmigosHastaAhora (persona, cant) ((p2,p3):rels)
+    | cant >= cantP2 && cant >= cantP3 = masAmigosHastaAhora (persona, cant) (rels)
+    | cantP2 >= cant && cantP2 >= cantP3 = masAmigosHastaAhora (p2, cantP2) (rels)
+    | cantP3 >= cantP2 && cantP3 >= cant = masAmigosHastaAhora (p3, cantP3) (rels)
+    where cantP2 = cantidadDeAmigos p2 rels   
+          cantP3 = cantidadDeAmigos p3 rels
 
 
+
+
+
+
+
+
+
+-}
