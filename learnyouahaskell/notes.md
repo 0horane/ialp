@@ -521,7 +521,14 @@ monad laws:
 monadic composition f g = (\x g x >>= f)
 
 ### More monads
+mtl package
 
+writer tye/monad
+value with attatched monoid.
+runwriter to show
+tell attatches a string to the log with no change
+
+difflist as an example..........
 
 
 
