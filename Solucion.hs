@@ -26,7 +26,7 @@ letraANatural _ = 1
 
 -- por favor hacer esto que se necesita como auxiliar
 naturalALetra :: Int -> Char
-letraANatural _ = 'a'
+naturalALetra _ = 'a'
 -- EJ 3
 desplazar :: Char -> Int -> Char
 desplazar _ _ = 'd'
@@ -56,7 +56,11 @@ cifradoMasFrecuente _ _ = ('o', 33.333336)
 
 -- EJ 9
 esDescifrado :: String -> String -> Bool
-esDescifrado _ _ = False
+esDescifrado s1 s2 = esDescifradoAux s1 s2 0
+
+esDescifradoAux :: String -> String -> Int -> Bool
+esDescifradoAux _ _ 26 = False
+esDescifradoAux s1 s2 despNum = s2 == cifrar s1 despNum || esDescifradoAux s1 s2 (despNum + 1) 
 
 -- EJ 10
 todosLosDescifrados :: [String] -> [(String, String)]
@@ -72,7 +76,13 @@ cifrarVigenere _ _ = "kdueciirqdv"
 
 -- EJ 13
 descifrarVigenere :: String -> String -> String
-descifrarVigenere _ _ = "computacion"
+descifrarVigenere string clave = descifrarVigenereAux string (expandirClave clave (length string)) 
+
+
+descifrarVigenereAux :: String -> String -> String
+descifrarVigenereAux "" _ = ""
+descifrarVigenereAux (letra:string) (letraClave:claveExp) = desplazar letra (-n):descifrarVigenereAux string claveExp
+    where n = letraANatural letraClave
 
 -- EJ 14
 peorCifrado :: String -> [String] -> String
