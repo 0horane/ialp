@@ -21,12 +21,18 @@ esMinuscula letra = ord 'a' <= ordLet && ordLet <= ord 'z'
     where ordLet = ord letra
 
 -- EJ 2
+-- La letra entra primero en la funcion LetraANatural para despues entrar en la funcion 
+-- posicion, en donde iniciara la recursion para determinar la posicion de la letra en la secuencia "ab..z".
 letraANatural :: Char -> Int
-letraANatural _ = 1
+letraANatural letra = posicion letra "abcdefghijklmnopqrstuvwxyz"
 
--- por favor hacer esto que se necesita como auxiliar
-naturalALetra :: Int -> Char
-naturalALetra _ = 'a'
+-- La funcion auxiliar posicion.
+posicion :: Char -> [Char] -> Int
+posicion letra [] = 0
+posicion letra (x:xs) | letra == x = 0
+                      | otherwise = 1 + posicion letra xs
+
+
 -- EJ 3
 desplazar :: Char -> Int -> Char
 desplazar _ _ = 'd'
