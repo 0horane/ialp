@@ -112,7 +112,13 @@ expandirClave (x:xs) n = x : expandirClave (xs ++ [x]) (n - 1)
 
 -- EJ 12
 cifrarVigenere :: String -> String -> String
-cifrarVigenere _ _ = "kdueciirqdv"
+cifrarVigenere :: String -> String -> String
+cifrarVigenere s clave = cifrarVigenereAux s (expandirClave clave (length s))
+
+-- Funcion auxiliar
+cifrarVigenereAux :: String -> String -> String
+cifrarVigenereAux [] _ = []
+cifrarVigenereAux (x:xs) (y:ys) = [desplazar x (letraANatural y)] ++ cifrarVigenereAux xs ys
 
 -- EJ 13
 descifrarVigenere :: String -> String -> String
