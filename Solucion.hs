@@ -45,7 +45,10 @@ abecedario posicion n | posicion + n <= -1 = abecedario (posicion + n + 26) 0
 
 -- EJ 4
 cifrar :: String -> Int -> String
-cifrar _ _ = "frpsxwdflrq"
+cifrar "" _ = ""
+cifrar x 0 = x
+cifrar (x:xs) n | esMinuscula x == True = desplazar x n : cifrar xs n
+                | otherwise = x : cifrar xs n
 
 -- EJ 5
 -- No es necesario usar guardas porque desplazar ya se fija si es minuscula
