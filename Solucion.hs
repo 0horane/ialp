@@ -63,7 +63,22 @@ cifrarLista _ = ["compu", "mbcp", "kpvtq"]
 
 -- EJ 7
 frecuencia :: String -> [Float]
-frecuencia _ = [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336,0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0]
+frecuencia "" = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+frecuencia x = frecuenciaAux1 x "abcdefghijklmnopqrstuvwxz" (cuantasLetrasMinusculas x)  
+
+frecuenciaAux1:: String -> String -> Int -> [Float]
+frecuenciaAux1 _ "" _ = []
+frecuenciaAux1 palabra (x:xs) n = ((fromIntegral (contarApariciones palabra x) / fromIntegral n ) * 100) : frecuenciaAux1 palabra xs n 
+
+cuantasLetrasMinusculas:: String -> Int
+cuantasLetrasMinusculas "" = 0
+cuantasLetrasMinusculas (x:xs) | esMinuscula x == True = 1 + cuantasLetrasMinusculas xs
+                               | otherwise = cuantasLetrasMinusculas xs   
+
+contarApariciones:: String -> Char -> Int
+contarApariciones "" _ =  0
+contarApariciones (x:xs) a | x == a = 1 + contarApariciones xs a
+                           | otherwise = contarApariciones xs a
 
 -- Ej 8
 cifradoMasFrecuente :: String -> Int -> (Char, Float)
