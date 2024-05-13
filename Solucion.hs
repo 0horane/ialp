@@ -15,10 +15,8 @@ import Data.Char
                         -- integrante, completar con los dni y apellidos, sino dejar vacío}
 
 -- EJ 1
--- Cuando esté hecho el proximo ejercicio, que se deberia hacer de manera similar a lo que hice yo aca, ma imagino que haciendo (ord letra - ord a), seria mejor reescribir este usando letraANatural
 esMinuscula :: Char -> Bool
-esMinuscula letra = ord 'a' <= ordLet && ordLet <= ord 'z'
-    where ordLet = ord letra
+esMinuscula letra = ord 'a' <= ord letra && ord letra <= ord 'z'
 
 -- EJ 2
 -- La letra entra primero en la funcion LetraANatural para despues entrar en la funcion 
@@ -38,11 +36,12 @@ desplazar :: Char -> Int -> Char
 desplazar letra n | esMinuscula letra == True = abecedario (letraANatural letra) n
                   | otherwise = letra
 
+-- esta funcion toma un valor de un caracted de letraANatural, le suma el desplazamiento, y calcula su valor
 -- No confundir la variable posicion con la funcion posicion de arriba.
 abecedario :: Int -> Int -> Char 
-abecedario posicion n | posicion + n <= -1 = chr (posicion + n + 26 + 97)
-                      | posicion + n >= 26 = chr (posicion + n - 26 + 97)
-                      | posicion + n >= 0 && posicion + n <= 25 = chr (posicion + n + 97)
+abecedario posicion n | posicion + n <= -1 = abecedario (posicion + n + 26) 0
+                      | posicion + n >= 26 = abecedario (posicion + n - 26) 0
+                      | otherwise = chr (posicion + n + (ord 'a'))
 
 -- EJ 4
 cifrar :: String -> Int -> String
