@@ -83,7 +83,8 @@ todosLosDescifrados _ = [("compu", "frpsx"), ("frpsx", "compu")]
 
 -- EJ 11
 expandirClave :: String -> Int -> String
-expandirClave _ _ = "compucom"
+expandirClave (x:xs) 0 = []
+expandirClave (x:xs) n = x : expandirClave (xs ++ [x]) (n - 1) 
 
 -- EJ 12
 cifrarVigenere :: String -> String -> String
