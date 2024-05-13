@@ -35,7 +35,14 @@ posicion letra (x:xs) | letra == x = 0
 
 -- EJ 3
 desplazar :: Char -> Int -> Char
-desplazar _ _ = 'd'
+desplazar letra n | esMinuscula letra == True = abecedario (letraANatural letra) n
+                  | otherwise = letra
+
+-- No confundir la variable posicion con la funcion posicion de arriba.
+abecedario :: Int -> Int -> Char 
+abecedario posicion n | posicion + n <= -1 = chr (posicion + n + 26 + 97)
+                      | posicion + n >= 26 = chr (posicion + n - 26 + 97)
+                      | posicion + n >= 0 && posicion + n <= 25 = chr (posicion + n + 97)
 
 -- EJ 4
 cifrar :: String -> Int -> String
