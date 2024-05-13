@@ -59,7 +59,16 @@ descifrar (letra:letras) despNum = desplazar letra (-despNum):descifrar letras d
 
 -- EJ 6
 cifrarLista :: [String] -> [String]
-cifrarLista _ = ["compu", "mbcp", "kpvtq"]
+cifrarLista [] = []
+cifrarLista (x:xs) = 
+
+cifrarListaAux :: [String] -> Int -> [String]
+cifrarListaAux [] _ = []
+cifrarListaAux (x:xs) n = cifrar x n : cifrarListaAux xs n
+ 
+contarelementos :: [String] -> Int
+contarelementos []  = 0
+contarelementos (x:xs) = 1 + contarelementos xs  
 
 -- EJ 7
 frecuencia :: String -> [Float]
