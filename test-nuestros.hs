@@ -104,10 +104,10 @@ elecciones: logitud de clave =1, >1, n=1, n>1
 
 -}
 testsEjexpandirClave = test [
-    expandirClave "compu" 8 ~?= "compucom"
-    expandirClave "compu" 1 ~?= "c"
-    expandirClave "rompu" 5 ~?= "rompu"
-    expandirClave "b" 1 ~?= "b"
+    expandirClave "compu" 8 ~?= "compucom",
+    expandirClave "compu" 1 ~?= "c",
+    expandirClave "rompu" 5 ~?= "rompu",
+    expandirClave "b" 1 ~?= "b",
     expandirClave "test" 22 ~?= "testtesttesttesttestte"
 
     ]
