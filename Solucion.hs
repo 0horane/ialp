@@ -112,7 +112,6 @@ expandirClave (x:xs) n = x : expandirClave (xs ++ [x]) (n - 1)
 
 -- EJ 12
 cifrarVigenere :: String -> String -> String
-cifrarVigenere :: String -> String -> String
 cifrarVigenere s clave = cifrarVigenereAux s (expandirClave clave (length s))
 
 -- Funcion auxiliar
