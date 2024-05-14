@@ -60,15 +60,11 @@ descifrar (letra:letras) despNum = desplazar letra (-despNum):descifrar letras d
 -- EJ 6
 cifrarLista :: [String] -> [String]
 cifrarLista [] = []
-cifrarLista (x:xs) = 
+cifrarLista (x:xs) = (cifrarListaAux (x:xs) 0)
 
 cifrarListaAux :: [String] -> Int -> [String]
 cifrarListaAux [] _ = []
-cifrarListaAux (x:xs) n = cifrar x n : cifrarListaAux xs n
- 
-contarelementos :: [String] -> Int
-contarelementos []  = 0
-contarelementos (x:xs) = 1 + contarelementos xs  
+cifrarListaAux (x:xs) n = cifrar x n : cifrarListaAux xs (n + 1)
 
 -- EJ 7
 frecuencia :: String -> [Float]
@@ -130,8 +126,25 @@ descifrarVigenereAux (letra:string) (letraClave:claveExp) = desplazar letra (-n)
     where n = letraANatural letraClave
 
 -- EJ 14
-peorCifrado :: String -> [String] -> String
-peorCifrado _ _ = "asdef"
+{-peorCifrado :: String -> [String] -> String
+peorCifrado "" _ = ""
+peorCifrado palabra [x] = x
+peorcifrado palabra (x:xs) | (comparar palabra (x:xs)) == True = x
+                           | otherwise = peorCifrado palabra xs
+
+comparar :: String -> [String] -> Bool
+comparar _ [] = True 
+comparar palabra [x] = True
+comparar palabra (x:y:xs) =  (distancia palabra (cifrarVigenere palabra x)) >= (distancia palabra (cifrarVigenere palabra y)) && comparar palabra (x:xs) 
+
+distancia :: String -> String -> Int
+distancia "" "" = 0
+distancia (x:xs) (y:ys) = absoluto (letraANatural x - letraANatural y) + distancia xs ys
+
+absoluto :: Int -> Int
+absoluto n | n >= 0 = 0
+           | otherwise = - n
+no terminado-}
 
 -- EJ 15
 combinacionesVigenere :: [String] -> [String] -> String -> [(String, String)]
