@@ -38,7 +38,8 @@ testsEjesMinuscula = test [
     esMinuscula 'Z' ~?= False,
     esMinuscula 'Á' ~?= False,
     esMinuscula '1' ~?= False,
-    esMinuscula '@' ~?= False
+    esMinuscula '@' ~?= False,
+    esMinuscula ' ' ~?= False
     ]
 
 {-
