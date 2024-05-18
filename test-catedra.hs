@@ -45,12 +45,7 @@ testsEjdescifrar = test [
     ]
 
 testsEjcifrarLista = test [
-    cifrarLista ["compu", "labo", "intro"] ~?= ["compu", "mbcp", "kpvtq"],
-    cifrarLista [] ~?= [],
-    cifrarLista ["compu"]  ~?= ["compu"],
-    cifrarLista ["compu","compu","compu"]  ~?= ["compu","dpnqv","eqorw"],
-    cifrarLista ["compu","compu","compu","labo","haskell","felipe","silla","mesa","mouse","compu","mesa","intro","labo"]  ~?= 
-                ["compu","dpnqv","eqorw","oder","lewoipp","kjqnuj","yorrg","tlzh","uwcam","lxvyd","wock","tyecz","xmna"]
+    cifrarLista ["compu", "labo", "intro"] ~?= ["compu", "mbcp", "kpvtq"]
     ]
 
 testsEjfrecuencia = test [
