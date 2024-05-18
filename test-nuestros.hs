@@ -25,7 +25,20 @@ allTests = test [
 
 
 testsEjesMinuscula = test [
-    esMinuscula 'd' ~?= True
+    esMinuscula 'd' ~?= True,
+    esMinuscula 'a' ~?= True,
+    esMinuscula 'z' ~?= True,
+    esMinuscula 'ñ' ~?= False,
+    esMinuscula 'ó' ~?= False,
+    esMinuscula 'á' ~?= False,
+    esMinuscula 'é' ~?= False,
+    esMinuscula 'í' ~?= False,
+    esMinuscula 'ú' ~?= False,
+    esMinuscula 'A' ~?= False,
+    esMinuscula 'Z' ~?= False,
+    esMinuscula 'Á' ~?= False,
+    esMinuscula '1' ~?= False,
+    esMinuscula '@' ~?= False
     ]
 
 {-
