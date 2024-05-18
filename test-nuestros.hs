@@ -101,7 +101,17 @@ testsEjcifrarLista = test [
     ]
 
 testsEjfrecuencia = test [
+-- El falla viene porque la longitud de res es igual a 26.
     expectlistProximity (frecuencia "taller") [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336,0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0]
+    expectlistProximity (frecuencia "") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+    -- La longitud de res no es igual a 26 y todas las posiciones de res no tienen el valor 0.
+    expectlistProximity (frecuencia "1") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+    -- La longitud de res no es igual a 26 y todas las posiciones de res no tienen el valor 0.
+    expectlistProximity (frecuencia "@") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+    -- Luis: No termine de hacer los demas casos de test pero solucionen lo de arriba. Prueben la funcion con las vocales con tildes, mayusuculas y mayusuculas con tildes.
+    -- Cuando regrese lo terminare
+    
+
     ]
 
 testsEjcifradoMasFrecuente = test [
