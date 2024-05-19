@@ -178,7 +178,7 @@ testsEjdescifrarVigenere = test [
     descifrarVigenere "kkkkkkk" "dldldldl" ~?= "hzhzhzh",
     descifrarVigenere "a" "baisalpi" ~?= "z",
     descifrarVigenere " " "ipip" ~?=  " ",
-    descifrarVigenere "áócompuña1Á" "be" ~?= "áóbklltñz1Á
+    descifrarVigenere "áócompuña1Á" "be" ~?= "áóbklltñz1Á,
     descifrarVigenere "" "ippppp" ~?= ""
     
 
