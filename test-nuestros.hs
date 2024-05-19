@@ -163,27 +163,22 @@ testsEjcifrarVigenere = test [
     ]
 
 testsEjdescifrarVigenere = test [
-    descifrarVigenere "kdueciirqdv" "ip" ~?= "computacion"
-    descifrarVigenere "á" "ip" ~?= "á"
-descifrarVigenere "é" "ip" ~?= "é"
-descifrarVigenere "í" "ip" ~?= "í"
-descifrarVigenere "ó" "ip" ~?= "ó"
-descifrarVigenere "ú" "ip" ~?= "ú"
-descifrarVigenere "A" "ip" ~?= "A"
-descifrarVigenere "Á" "ip" ~?= "Á"
-descifrarVigenere "ñ" "ip" ~?= "ñ"
-descifrarVigenere "113413" "ip" ~?= "113413"
-descifrarVigenere "113413" "ipcomputacion" ~?= "113413"
-descifrarVigenere "@@áóóóúñAcÁf" "az" ~?= "@@áóóóúñAcÁf"
-
-descifrarVigenere "kkkkkkk" "dldldldl" ~?= 
-"hzhzhzh"
-descifrarVigenere "a" "baisalpi" ~?= "z"
-descifrarVigenere " " ipip ~?=  " "
-descifrarVigenere "áócompuña1Á" "be" 
-~?= "áóbklltñz1Á.
-
-
+    descifrarVigenere "kdueciirqdv" "ip" ~?= "computacion",
+    descifrarVigenere "á" "ip" ~?= "á",
+    descifrarVigenere "é" "ip" ~?= "é",
+    descifrarVigenere "í" "ip" ~?= "í",
+    descifrarVigenere "ó" "ip" ~?= "ó",
+    descifrarVigenere "ú" "ip" ~?= "ú",
+    descifrarVigenere "A" "ip" ~?= "A",
+    descifrarVigenere "Á" "ip" ~?= "Á",
+    descifrarVigenere "ñ" "ip" ~?= "ñ",
+    descifrarVigenere "113413" "ip" ~?= "113413",
+    descifrarVigenere "113413" "ipcomputacion" ~?= "113413",
+    descifrarVigenere "@@áóóóúñAcÁf" "az" ~?= "@@áóóóúñAcÁf",
+    descifrarVigenere "kkkkkkk" "dldldldl" ~?= "hzhzhzh",
+    descifrarVigenere "a" "baisalpi" ~?= "z",
+    descifrarVigenere " " ipip ~?=  " ",
+    descifrarVigenere "áócompuña1Á" "be" ~?= "áóbklltñz1Á.
 
     ]
 
