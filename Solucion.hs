@@ -1,4 +1,4 @@
-module Solucion where
+    module Solucion where
 import Data.Char
 -- No se permite agrear nuevos imports
 -- Sólo está permitido usar estas funciones:
@@ -134,27 +134,20 @@ descifrarVigenereAux (letra:string) (letraClave:claveExp) = desplazar letra (-n)
     where n = letraANatural letraClave
 
 -- EJ 14
+-- Si ingresan s = [] recuerden que res es igual a un elemento que pertenece a claves.
+-- Res es igual a "alguno" de los que deja el mensaje s a menor distancia de su cifrado Vigere.
 peorCifrado :: String -> [String] -> String
-peorCifrado _ _ = ""
-{-peorCifrado :: String -> [String] -> String
-peorCifrado "" _ = ""
-peorCifrado palabra [x] = x
-peorcifrado palabra (x:xs) | (comparar palabra (x:xs)) == True = x
-                           | otherwise = peorCifrado palabra xs
-
-comparar :: String -> [String] -> Bool
-comparar _ [] = True 
-comparar palabra [x] = True
-comparar palabra (x:y:xs) =  (distancia palabra (cifrarVigenere palabra x)) >= (distancia palabra (cifrarVigenere palabra y)) && comparar palabra (x:xs) 
+peorCifrado s [x] = x
+peorCifrado s (x:y:xs) | distancia s (cifrarVigenere s x) > distancia s (cifrarVigenere s y) = peorCifrado s (y:xs)
+                       | otherwise = peorCifrado s (x:xs)
 
 distancia :: String -> String -> Int
 distancia "" "" = 0
-distancia (x:xs) (y:ys) = absoluto (letraANatural x - letraANatural y) + distancia xs ys
+distancia (y:xs) (x:ys) = absoluto (letraANatural y - letraANatural x) + distancia ys xs
 
 absoluto :: Int -> Int
-absoluto n | n >= 0 = 0
-           | otherwise = - n
-no terminado-}
+absoluto n | n >= 0 = n
+           | otherwise = -n
 
 -- EJ 15
 -- resEsp es resultado esperado
