@@ -90,9 +90,14 @@ contarApariciones "" _ =  0
 contarApariciones (x:xs) a | x == a = 1 + contarApariciones xs a
                            | otherwise = contarApariciones xs a
 
--- Ej 8
+--Ej 8
 cifradoMasFrecuente :: String -> Int -> (Char, Float)
-cifradoMasFrecuente _ _ = ('o', 33.333336)
+cifradoMasFrecuente (x:xs) n = (letraMasFrecuente (cifrar (x:xs) n), frecuencia (cifrar (x:xs) n) !!n)
+
+letraMasFrecuente :: String -> Char
+letraMasFrecuente [x] = x
+letraMasFrecuente (x:y:xs) | contarApariciones  (x:y:xs) x >= contarApariciones (x:y:xs) y = letraMasFrecuente (x : xs)
+                           | otherwise = letraMasFrecuente (y:xs)
 
 -- EJ 9
 esDescifrado :: String -> String -> Bool
