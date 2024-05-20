@@ -90,12 +90,17 @@ contarApariciones (x:xs) a | x == a = 1 + contarApariciones xs a
 
 --Ej 8
 cifradoMasFrecuente :: String -> Int -> (Char, Float)
-cifradoMasFrecuente (x:xs) n = (letraMasFrecuente (cifrar (x:xs) n), frecuencia (cifrar (x:xs) n) !!n)
+cifradoMasFrecuente (x:xs) n = (letraMasFrecuente (cifrar (soloMinusculas(x:xs)) n), (frecuencia (cifrar (x:xs) n)) !!(letraANatural (letraMasFrecuente(cifrar (soloMinusculas(x:xs)) n))))
 
 letraMasFrecuente :: String -> Char
 letraMasFrecuente [x] = x
 letraMasFrecuente (x:y:xs) | contarApariciones  (x:y:xs) x >= contarApariciones (x:y:xs) y = letraMasFrecuente (x : xs)
                            | otherwise = letraMasFrecuente (y:xs)
+
+soloMinusculas :: String -> String
+soloMinusculas "" = ""
+soloMinusculas (x:xs) | esMinuscula x == True = x: soloMinusculas xs
+                      | otherwise = soloMinusculas xs
 
 -- EJ 9
 esDescifrado :: String -> String -> Bool
