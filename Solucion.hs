@@ -6,10 +6,10 @@ import Data.Char
 
 
 -- Completar!
--- Nombre de grupo: {DataWizard}
+-- Nombre de grupo: {DataWizards}
 -- Integrante1: { 46030579,Sandoval Chirino Felipe}
 -- Integrante2: { 46404134,Leandro Ernesto Horane Siracusa}
--- Integrante3: { DNI3,apellidoYNombre3}
+-- Integrante3: { 95272420,Luis Enrrique Roncal Aranda}
 -- Integrante4: { DNI4,apellidoYNombre4}
 
 -- EJ 1
