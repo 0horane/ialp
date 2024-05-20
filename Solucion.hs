@@ -8,11 +8,9 @@ import Data.Char
 -- Completar!
 -- Nombre de grupo: {DataWizard}
 -- Integrante1: { 46030579,Sandoval Chirino Felipe}
--- Integrante2: { DNI2,apellidoYNombre2}
+-- Integrante2: { 46404134,Leandro Ernesto Horane Siracusa}
 -- Integrante3: { DNI3,apellidoYNombre3}
 -- Integrante4: { DNI4,apellidoYNombre4}
--- Integrantes que abandonaron la materia: {En caso que haya abandonado la materia algún
-                        -- integrante, completar con los dni y apellidos, sino dejar vacío}
 
 -- EJ 1
 esMinuscula :: Char -> Bool
@@ -136,6 +134,8 @@ descifrarVigenereAux (letra:string) (letraClave:claveExp) = desplazar letra (-n)
     where n = letraANatural letraClave
 
 -- EJ 14
+peorCifrado :: String -> [String] -> String
+peorCifrado _ _ = ""
 {-peorCifrado :: String -> [String] -> String
 peorCifrado "" _ = ""
 peorCifrado palabra [x] = x
@@ -157,5 +157,15 @@ absoluto n | n >= 0 = 0
 no terminado-}
 
 -- EJ 15
+-- resEsp es resultado esperado
 combinacionesVigenere :: [String] -> [String] -> String -> [(String, String)]
-combinacionesVigenere _ _ _ = [("hola", "b")]
+combinacionesVigenere [] _ _ = []
+combinacionesVigenere (mesj:mesjs) claves resEsp = (probarClavesVigenere mesj claves resEsp)++(combinacionesVigenere mesjs claves resEsp)
+
+
+probarClavesVigenere :: String -> [String] -> String -> [(String, String)]
+probarClavesVigenere _ [] _ = []
+probarClavesVigenere mesj (clave:claves) resEsp 
+    | cifrarVigenere mesj clave == resEsp = (mesj,clave):pasoRecursivo
+    | otherwise = pasoRecursivo
+    where pasoRecursivo = probarClavesVigenere mesj claves resEsp
