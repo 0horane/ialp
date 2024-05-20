@@ -10,7 +10,7 @@ import Data.Char
 -- Integrante1: { 46030579,Sandoval Chirino Felipe}
 -- Integrante2: { 46404134,Leandro Ernesto Horane Siracusa}
 -- Integrante3: { 95272420,Luis Enrrique Roncal Aranda}
--- Integrante4: { DNI4,apellidoYNombre4}
+-- Integrante4: { 39463400,Nicolás Epstein}
 
 -- EJ 1
 esMinuscula :: Char -> Bool
