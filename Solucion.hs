@@ -6,8 +6,8 @@ import Data.Char
 
 
 -- Completar!
--- Nombre de grupo: {}
--- Integrante1: { DNI1,apellidoYNombre1}
+-- Nombre de grupo: {DataWizard}
+-- Integrante1: { 46030579,Sandoval Chirino Felipe}
 -- Integrante2: { DNI2,apellidoYNombre2}
 -- Integrante3: { DNI3,apellidoYNombre3}
 -- Integrante4: { DNI4,apellidoYNombre4}
@@ -68,12 +68,17 @@ cifrarListaAux (x:xs) n = cifrar x n : cifrarListaAux xs (n + 1)
 
 -- EJ 7
 frecuencia :: String -> [Float]
-frecuencia "" = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-frecuencia x = frecuenciaAux1 x "abcdefghijklmnopqrstuvwxz" (cuantasLetrasMinusculas x)  
+frecuencia "" = [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+frecuencia x | todasMayusculas x == False = [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
+frecuencia x = frecuenciaAux1 x "abcdefghijklmnopqrstuvwxyz" (cuantasLetrasMinusculas x)  
 
 frecuenciaAux1:: String -> String -> Int -> [Float]
 frecuenciaAux1 _ "" _ = []
 frecuenciaAux1 palabra (x:xs) n = ((fromIntegral (contarApariciones palabra x) / fromIntegral n ) * 100) : frecuenciaAux1 palabra xs n 
+
+todasMayusculas :: String -> Bool
+todasMayusculas [x] = esMinuscula x
+todasMayusculas (x:xs) = esMinuscula x || todasMayusculas xs
 
 cuantasLetrasMinusculas:: String -> Int
 cuantasLetrasMinusculas "" = 0
