@@ -23,7 +23,7 @@ allTests = test [
     "combinacionesVigenere" ~: testsEjcombinacionesVigenere
     ]
 
-
+--eje 1
 testsEjesMinuscula = test [
     esMinuscula 'd' ~?= True,
     esMinuscula 'a' ~?= True,
@@ -42,8 +42,7 @@ testsEjesMinuscula = test [
     esMinuscula ' ' ~?= False
     ]
 
-{-
-
+{-eje 2
 parametros y factores: c
 categoria: es  no minuscula
 elecciones: si->restricción=numero correspondiente, no->error
@@ -55,7 +54,7 @@ testsEjletraANatural = test [
     letraANatural 'y' ~?= 24
     ]
 
-{-
+{-eje 3
 parametros y factores: c, n
 categorias:
 rango de letraANumero c + n
@@ -83,6 +82,7 @@ testsEjdesplazar = test [
     desplazar 'm' (-5) ~?= 'h'
     ]
 
+--eje 4
 testsEjcifrar = test [
     cifrar "computacion" 3 ~?= "frpsxwdflrq",
     cifrar "computacion" 0 ~?= "computacion",
@@ -93,6 +93,7 @@ testsEjcifrar = test [
     cifrar "computacIon" 55 ~?= "frpsxwdfIrq"
     ]
 
+-- eje 5
 testsEjdescifrar = test [
     descifrar "frpsxwdflrq" 3 ~?= "computacion",
     descifrar "computacion" 0 ~?= "computacion",
@@ -103,6 +104,7 @@ testsEjdescifrar = test [
     descifrar "frpsxwdfIrq" 55 ~?= "computacIon"
     ]
 
+--eje 6
 testsEjcifrarLista = test [
     cifrarLista ["compu", "labo", "intro"] ~?= ["compu", "mbcp", "kpvtq"],
     cifrarLista [] ~?= [],
@@ -112,6 +114,7 @@ testsEjcifrarLista = test [
                 ["compu","dpnqv","eqorw","oder","lewoipp","kjqnuj","yorrg","tlzh","uwcam","lxvyd","wock","tyecz","xmna"]
     ]
 
+--eje 7
 -- Creo que hay casos de prueba de mas
 testsEjfrecuencia = test [
 -- El falla viene porque la longitud de res es igual a 26.
@@ -134,25 +137,34 @@ testsEjfrecuencia = test [
  -- La falla (15) se da mayormente por la longitud de la lista
     ]
 
+--eje 8
 testsEjcifradoMasFrecuente = test [
+    cifradoMasFrecuente "HHa" 5 ~?= ('f', 100.0)
+    cifradoMasFrecuente "rosa54@+/" 2 ~?= ('t', 25.0)
+    cifradoMasFrecuente "y" 3 ~?= ('b', 100.0)
     cifradoMasFrecuente "taller" 3 ~?= ('o', 33.333336)
     ]
 
+--eje 9
 testsEjesDescifrado = test [
+    esDescifrado "" "" ~?= True
+    esDescifrado "" "ala" ~?= False
     esDescifrado "taller" "compu" ~?= False
+    esDescifrado "COLA@" "COLA@" ~?= True
     ]
 
+--eje 10
 -- PREGUTNAR EN CLASE SI EL SEGUNDOCASO DE TEST ES CORRECTO
 testsEjtodosLosDescifrados = test [
+    todosLosDescifrados [] ~?= []
     todosLosDescifrados ["compu", "frpsx", "mywza"] ~?= [("compu", "frpsx"), ("frpsx", "compu")],
     todosLosDescifrados ["hola", "hola", cifrar "hola" 2] ~?= [("hola","jqnc"),("jqnc","hola"),("hola","jqnc"),("jqnc","hola")] 
     ]
 
-{-
+{-eje 11
 parametros y factores: clave, n
 categoria: logitud de clave, valor de n
 elecciones: logitud de clave =1, >1, n=1, n>1
-
 -}
 testsEjexpandirClave = test [
     expandirClave "compu" 8 ~?= "compucom",
@@ -160,13 +172,14 @@ testsEjexpandirClave = test [
     expandirClave "rompu" 5 ~?= "rompu",
     expandirClave "b" 1 ~?= "b",
     expandirClave "test" 22 ~?= "testtesttesttesttestte"
-
     ]
 
+--eje 12
 testsEjcifrarVigenere = test [
     cifrarVigenere "computacion" "ip" ~?= "kdueciirqdv"
     ]
 
+--eje 13
 testsEjdescifrarVigenere = test [
     descifrarVigenere "kdueciirqdv" "ip" ~?= "computacion",
     descifrarVigenere "á" "ip" ~?= "á",
@@ -185,14 +198,15 @@ testsEjdescifrarVigenere = test [
     descifrarVigenere " " "ipip" ~?=  " ",
     descifrarVigenere "áócompuña1Á" "be" ~?= "áóbklltñz1Á",
     descifrarVigenere "" "ippppp" ~?= ""
-    
-
     ]
 
+--eje 14
 testsEjpeorCifrado = test [
+    peorCifrado "logistica" ["datawizard"] ~?= "datawizard"
     peorCifrado "computacion" ["ip", "asdef", "ksy"] ~?= "asdef"
     ]
 
+--eje 15
 testsEjcombinacionesVigenere = test [
     combinacionesVigenere ["hola", "mundo"] ["a", "b"] "ipmb" ~?= [("hola", "b")]
     ]
