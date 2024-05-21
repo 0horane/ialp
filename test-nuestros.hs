@@ -3,7 +3,7 @@ import Solucion
 import Data.List
 -- No está permitido agregar nuevos imports.
 
-runCatedraTests = runTestTT allTests
+runNuestrosTests = runTestTT allTests
 
 allTests = test [
     "esMinuscula" ~: testsEjesMinuscula,
@@ -84,11 +84,23 @@ testsEjdesplazar = test [
     ]
 
 testsEjcifrar = test [
-    cifrar "computacion" 3 ~?= "frpsxwdflrq"
+    cifrar "computacion" 3 ~?= "frpsxwdflrq",
+    cifrar "computacion" 0 ~?= "computacion",
+    cifrar "" 3 ~?= "",
+    cifrar "" 0 ~?= "",
+    cifrar "computacIon" 3 ~?= "frpsxwdfIrq",
+    cifrar "computacIon" 29 ~?= "frpsxwdfIrq",
+    cifrar "computacIon" 55 ~?= "frpsxwdfIrq"
     ]
 
 testsEjdescifrar = test [
-    descifrar "frpsxwdflrq" 3 ~?= "computacion"
+    descifrar "frpsxwdflrq" 3 ~?= "computacion",
+    descifrar "computacion" 0 ~?= "computacion",
+    descifrar "" 3 ~?= "",
+    descifrar "" 0 ~?= "",
+    descifrar "frpsxwdfIrq" 3 ~?= "computacIon",
+    descifrar "frpsxwdfIrq" 29 ~?= "computacIon",
+    descifrar "frpsxwdfIrq" 55 ~?= "computacIon"
     ]
 
 testsEjcifrarLista = test [
@@ -100,6 +112,7 @@ testsEjcifrarLista = test [
                 ["compu","dpnqv","eqorw","oder","lewoipp","kjqnuj","yorrg","tlzh","uwcam","lxvyd","wock","tyecz","xmna"]
     ]
 
+-- Creo que hay casos de prueba de mas
 testsEjfrecuencia = test [
 -- El falla viene porque la longitud de res es igual a 26.
     expectlistProximity (frecuencia "taller") [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336,0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0],
@@ -129,8 +142,10 @@ testsEjesDescifrado = test [
     esDescifrado "taller" "compu" ~?= False
     ]
 
+-- PREGUTNAR EN CLASE SI EL SEGUNDOCASO DE TEST ES CORRECTO
 testsEjtodosLosDescifrados = test [
-    todosLosDescifrados ["compu", "frpsx", "mywza"] ~?= [("compu", "frpsx"), ("frpsx", "compu")]
+    todosLosDescifrados ["compu", "frpsx", "mywza"] ~?= [("compu", "frpsx"), ("frpsx", "compu")],
+    todosLosDescifrados ["hola", "hola", cifrar "hola" 2] ~?= [("hola","jqnc"),("jqnc","hola"),("hola","jqnc"),("jqnc","hola")] 
     ]
 
 {-

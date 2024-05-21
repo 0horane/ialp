@@ -12,6 +12,27 @@ import Data.Char
 -- Integrante3: { 95272420,Luis Enrrique Roncal Aranda}
 -- Integrante4: { 39463400,Nicolás Epstein}
 
+-- AUXILIARES REUSABLES
+-- Quizas conviene generarlo?
+abecedario :: String 
+abecedario = "abcdefghijklmnopqrstuvwxyz"
+
+posicion :: Char -> [Char] -> Int
+posicion letra [] = 0
+posicion letra (x:xs) | letra == x = 0
+                      | otherwise = 1 + posicion letra xs
+
+contarApariciones :: String -> Char -> Int
+contarApariciones "" _ =  0
+contarApariciones (x:xs) a | x == a = 1 + contarApariciones xs a
+                           | otherwise = contarApariciones xs a
+
+soloMinusculas :: String -> String
+soloMinusculas "" = ""
+soloMinusculas (x:xs) | esMinuscula x = x:soloMinusculas xs
+                      | otherwise = soloMinusculas xs
+
+
 -- EJ 1
 esMinuscula :: Char -> Bool
 esMinuscula letra = ord 'a' <= ord letra && ord letra <= ord 'z'
@@ -19,34 +40,32 @@ esMinuscula letra = ord 'a' <= ord letra && ord letra <= ord 'z'
 -- EJ 2
 -- La letra entra primero en la funcion LetraANatural para despues entrar en la funcion 
 -- posicion, en donde iniciara la recursion para determinar la posicion de la letra en la secuencia "ab..z".
+-- Tambien se podria haber hecho con el mismo método que la anterior, restando ord 'a'
 letraANatural :: Char -> Int
-letraANatural letra = posicion letra "abcdefghijklmnopqrstuvwxyz"
+letraANatural letra = posicion letra abecedario
 
 -- La funcion auxiliar posicion.
-posicion :: Char -> [Char] -> Int
-posicion letra [] = 0
-posicion letra (x:xs) | letra == x = 0
-                      | otherwise = 1 + posicion letra xs
 
 
 -- EJ 3
 desplazar :: Char -> Int -> Char
-desplazar letra n | esMinuscula letra == True = abecedario (letraANatural letra) n
+desplazar letra n | esMinuscula letra = naturalALetradesplazada (letraANatural letra) n
                   | otherwise = letra
 
 -- esta funcion toma un valor de un caracted de letraANatural, le suma el desplazamiento, y calcula su valor
 -- No confundir la variable posicion con la funcion posicion de arriba.
-abecedario :: Int -> Int -> Char 
-abecedario posicion n | posicion + n <= -1 = abecedario (posicion + n + 26) 0
-                      | posicion + n >= 26 = abecedario (posicion + n - 26) 0
+-- Habria que reescribir esto con una auxiliar llamada naturalALetra creo, quedaria mejor. aca estamos mezclando letraANatural y chr/ord que utilizan rangos diferentes
+naturalALetradesplazada :: Int -> Int -> Char 
+naturalALetradesplazada posicion n 
+                      | posicion + n <= -1 = naturalALetradesplazada (posicion + n + 26) 0
+                      | posicion + n >= 26 = naturalALetradesplazada (posicion + n - 26) 0
                       | otherwise = chr (posicion + n + (ord 'a'))
 
 -- EJ 4
 cifrar :: String -> Int -> String
 cifrar "" _ = ""
 cifrar x 0 = x
-cifrar (x:xs) n | esMinuscula x == True = desplazar x n : cifrar xs n
-                | otherwise = x : cifrar xs n
+cifrar (x:xs) n = desplazar x n : cifrar xs n
 
 -- EJ 5
 -- No es necesario usar guardas porque desplazar ya se fija si es minuscula
@@ -66,28 +85,18 @@ cifrarListaAux (x:xs) n = cifrar x n : cifrarListaAux xs (n + 1)
 
 -- EJ 7
 frecuencia :: String -> [Float]
-frecuencia "" = [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
-frecuencia x | todasMayusculas x == False = [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
-frecuencia x = frecuenciaAux1 x "abcdefghijklmnopqrstuvwxyz" (cuantasLetrasMinusculas x)  
+frecuencia x = frecuenciaAux1 x abecedario (cuantasLetrasMinusculas x)  
 
-frecuenciaAux1:: String -> String -> Int -> [Float]
+-- toma el string, las letras por losbre las cuales hace recursion, y la  longitud util (de minusculas) del string y genera la lista de frecuencias
+frecuenciaAux1 :: String -> String -> Int -> [Float]
 frecuenciaAux1 _ "" _ = []
-frecuenciaAux1 palabra (x:xs) n = ((fromIntegral (contarApariciones palabra x) / fromIntegral n ) * 100) : frecuenciaAux1 palabra xs n 
+frecuenciaAux1 palabra (_:abcs) 0 = 0.0:frecuenciaAux1 palabra abcs 0 
+frecuenciaAux1 palabra (letra:abcs) lenMin = ((fromIntegral (contarApariciones palabra letra) / fromIntegral lenMin ) * 100) : frecuenciaAux1 palabra abcs lenMin 
 
-todasMayusculas :: String -> Bool
-todasMayusculas [x] = esMinuscula x
-todasMayusculas (x:xs) = esMinuscula x || todasMayusculas xs
+cuantasLetrasMinusculas :: String -> Int
+cuantasLetrasMinusculas palabra = length (soloMinusculas palabra)
 
-cuantasLetrasMinusculas:: String -> Int
-cuantasLetrasMinusculas "" = 0
-cuantasLetrasMinusculas (x:xs) | esMinuscula x == True = 1 + cuantasLetrasMinusculas xs
-                               | otherwise = cuantasLetrasMinusculas xs   
-
-contarApariciones:: String -> Char -> Int
-contarApariciones "" _ =  0
-contarApariciones (x:xs) a | x == a = 1 + contarApariciones xs a
-                           | otherwise = contarApariciones xs a
-
+--HACER SIN FUNCION PROHIBIDA
 --Ej 8
 cifradoMasFrecuente :: String -> Int -> (Char, Float)
 cifradoMasFrecuente (x:xs) n = (letraMasFrecuente (cifrar (soloMinusculas(x:xs)) n), (frecuencia (cifrar (x:xs) n)) !!(letraANatural (letraMasFrecuente(cifrar (soloMinusculas(x:xs)) n))))
@@ -97,10 +106,7 @@ letraMasFrecuente [x] = x
 letraMasFrecuente (x:y:xs) | contarApariciones  (x:y:xs) x >= contarApariciones (x:y:xs) y = letraMasFrecuente (x : xs)
                            | otherwise = letraMasFrecuente (y:xs)
 
-soloMinusculas :: String -> String
-soloMinusculas "" = ""
-soloMinusculas (x:xs) | esMinuscula x == True = x: soloMinusculas xs
-                      | otherwise = soloMinusculas xs
+
 
 -- EJ 9
 esDescifrado :: String -> String -> Bool
@@ -112,7 +118,15 @@ esDescifradoAux s1 s2 despNum = s2 == cifrar s1 despNum || esDescifradoAux s1 s2
 
 -- EJ 10
 todosLosDescifrados :: [String] -> [(String, String)]
-todosLosDescifrados _ = [("compu", "frpsx"), ("frpsx", "compu")]
+todosLosDescifrados [] = []
+todosLosDescifrados (cif:cifs) = (listarDescifrados cif cifs) ++ (todosLosDescifrados cifs)
+
+listarDescifrados :: String -> [String] -> [(String, String)]
+listarDescifrados _ [] = []
+listarDescifrados s1 (s2:s2s) 
+    | s1 /= s2 && esDescifrado s1 s2 = (s1,s2):(s2,s1):pasoRecursivo
+    | otherwise = pasoRecursivo
+    where pasoRecursivo = listarDescifrados s1 s2s
 
 -- EJ 11
 expandirClave :: String -> Int -> String
@@ -126,7 +140,7 @@ cifrarVigenere s clave = cifrarVigenereAux s (expandirClave clave (length s))
 -- Funcion auxiliar
 cifrarVigenereAux :: String -> String -> String
 cifrarVigenereAux [] _ = []
-cifrarVigenereAux (x:xs) (y:ys) = [desplazar x (letraANatural y)] ++ cifrarVigenereAux xs ys
+cifrarVigenereAux (x:xs) (y:ys) = (desplazar x (letraANatural y)) : cifrarVigenereAux xs ys
 
 -- EJ 13
 descifrarVigenere :: String -> String -> String
