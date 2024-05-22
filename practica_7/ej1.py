@@ -1,4 +1,5 @@
 import math
+
 def pertenece(s:list[int],e:int)->bool:
     for item in s:
         if item == e:
