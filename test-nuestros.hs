@@ -68,8 +68,9 @@ testsEjdesplazar = test [
     "desplazaraPrimerCaracter"~:desplazar 'a' 3 ~?= 'd',
     "mismaLetra"~:desplazar 'f' 26 ~?= 'f',
     "noDesplazar"~:desplazar 'a' 0 ~?= 'a',
-    "deplazarMasDe26Lugares"~:desplazar 'a' (54*26-6) ~?= 'u',
+    "deplazarMasDe26Lugares"~:desplazar 'a' (573*26-6) ~?= 'u',
     "desplazarParaAtras"~:desplazar 'a' (-1) ~?= 'z',
+    "desplazarParaAtrasMasDe26Lugares"~:desplazar 'a' (-54) ~?= 'y',
     "desplazarUltimoCaracter"~:desplazar 'z' 1 ~?= 'a',
     "simbolo"~:desplazar '@' 5 ~?= '@'
     ]
@@ -90,6 +91,7 @@ parametros y factores: s, n
 testsEjdescifrar = test [
     "noDescifra"~:descifrar "frpsxwdflrq" 0 ~?= "frpsxwdflrq", 
     "StringVacio"~:descifrar "" 3 ~?= "",
+    "StringConTodoMayusculas"~:descifrar "DATAWIZARDS" 45 ~?= "DATAWIZARDS",
     "descifraRotandoMasDe26"~:descifrar "frpsxwdfIrq" 55 ~?= "computacIon"
     ]
 
@@ -142,7 +144,8 @@ testsEjtodosLosDescifrados = test [
     "casovacio"~:todosLosDescifrados [] ~?= [],
     "conRelacion"~: expectPermutacion (todosLosDescifrados ["compu", "frpsx", "mywza"] ) [("compu", "frpsx"), ("frpsx", "compu")],
     "sinRelacion"~:todosLosDescifrados ["comu", "plata", "moneda"] ~?= [],
-    expectPermutacion (todosLosDescifrados ["compu", "frpsx", "mywza", "frpsxwdfIrq", "computacIon" ] ) [("compu", "frpsx"), ("frpsx", "compu"), ("frpsxwdfIrq", "computacIon"), ("computacIon", "frpsxwdfIrq")]
+    ">1Relacion" ~: expectPermutacion (todosLosDescifrados ["compu", "frpsx", "mywza", "frpsxwdfIrq", "computacIon" ] ) [("compu", "frpsx"), ("frpsx", "compu"), ("frpsxwdfIrq", "computacIon"), ("computacIon", "frpsxwdfIrq")],
+    "relacionDoble" ~: expectPermutacion (todosLosDescifrados ["compu", "frpsx", "mywza", "htruz" ] ) [("compu", "frpsx"), ("frpsx", "compu"), ("htruz", "compu"), ("compu", "htruz"), ("htruz","frpsx"),("frpsx","htruz")]
     ]
 
 
