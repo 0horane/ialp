@@ -219,7 +219,6 @@ testsEjcombinacionesVigenere = test [
     "longitud = 1, unica solucion"    ~:    combinacionesVigenere ["hola"] ["b"] "ipmb" ~?= [("hola", "b")], 
     "longitud > 1, varias soluciones" ~: expectPermutacion (combinacionesVigenere ["hola", "djfw", "emds"] ["asd", "b", "fgh"] "ipmb") [("hola", "b"), ("djfw", "fgh")]  
     ]
- --8/10/14/15
 -- Funciones útiles
 
 -- margetFloat(): Float

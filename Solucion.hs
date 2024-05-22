@@ -12,8 +12,9 @@ import Data.Char
 -- Integrante3: { 95272420,Luis Enrrique Roncal Aranda}
 -- Integrante4: { 39463400,Nicolás Epstein}
 
+-- Pendientes: corregir tests, 8/10/14/15, reescribir ejercicio 3 
+
 -- AUXILIARES REUSABLES
--- Quizas conviene generarlo?
 abecedario :: String 
 abecedario = "abcdefghijklmnopqrstuvwxyz"
 
@@ -32,6 +33,7 @@ soloMinusculas "" = ""
 soloMinusculas (x:xs) | esMinuscula x = x:soloMinusculas xs
                       | otherwise = soloMinusculas xs
 
+-- Devuelve el indice de un item en una lista sumado a m
 --para que el índice arranque en la primera posición, m = 0
 indice :: (Eq t) => [t] -> Int -> Int -> t
 indice [x] _ _ = x
@@ -50,8 +52,6 @@ esMinuscula letra = ord 'a' <= ord letra && ord letra <= ord 'z'
 letraANatural :: Char -> Int
 letraANatural letra = posicion letra abecedario
 
--- La funcion auxiliar posicion.
-
 
 -- EJ 3
 desplazar :: Char -> Int -> Char
@@ -60,7 +60,6 @@ desplazar letra n | esMinuscula letra = naturalALetradesplazada (letraANatural l
 
 -- esta funcion toma un valor de un caracted de letraANatural, le suma el desplazamiento, y calcula su valor
 -- No confundir la variable posicion con la funcion posicion de arriba.
--- Habria que reescribir esto con una auxiliar llamada naturalALetra creo, quedaria mejor. aca estamos mezclando letraANatural y chr/ord que utilizan rangos diferentes
 naturalALetradesplazada :: Int -> Int -> Char 
 naturalALetradesplazada posicion n 
                       | posicion + n <= -1 = naturalALetradesplazada (posicion + n + 26) 0
