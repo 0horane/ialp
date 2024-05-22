@@ -32,6 +32,12 @@ soloMinusculas "" = ""
 soloMinusculas (x:xs) | esMinuscula x = x:soloMinusculas xs
                       | otherwise = soloMinusculas xs
 
+--para que el índice arranque en la primera posic
+indice :: (Eq t) => [t] -> Int -> Int -> t
+indice [x] _ _ = x
+indice (x:xs) n m | n == m = x
+                  | otherwise = indice xs n (m+1)
+
 
 -- EJ 1
 esMinuscula :: Char -> Bool
@@ -96,17 +102,20 @@ frecuenciaAux1 palabra (letra:abcs) lenMin = ((fromIntegral (contarApariciones p
 cuantasLetrasMinusculas :: String -> Int
 cuantasLetrasMinusculas palabra = length (soloMinusculas palabra)
 
---HACER SIN FUNCION PROHIBIDA
 --Ej 8
 cifradoMasFrecuente :: String -> Int -> (Char, Float)
-cifradoMasFrecuente (x:xs) n = (letraMasFrecuente (cifrar (soloMinusculas(x:xs)) n), (frecuencia (cifrar (x:xs) n)) !!(letraANatural (letraMasFrecuente(cifrar (soloMinusculas(x:xs)) n))))
+cifradoMasFrecuente (x:xs) n = (letra, indice ((frecuencia (cifrar (x:xs) n))) (letraANatural letra) 0)
+                        where
+                            letra = letraMasFrecuente (cifrar (soloMinusculas(x:xs)) n)
 
 letraMasFrecuente :: String -> Char
 letraMasFrecuente [x] = x
-letraMasFrecuente (x:y:xs) | contarApariciones  (x:y:xs) x >= contarApariciones (x:y:xs) y = letraMasFrecuente (x : xs)
-                           | otherwise = letraMasFrecuente (y:xs)
+letraMasFrecuente (x:xs) = indice (abecedario) (posicion (maximaFrecuencia (frecuencia (x:xs))) (frecuencia (x:xs))) 0
 
-
+maximaFrecuencia :: [Float] -> Float
+maximaFrecuencia [x] = x
+maximaFrecuencia (x:y:xs) | x >= y = maximaFrecuencia (x:xs)
+                          | otherwise = maximaFrecuencia (y:xs)
 
 -- EJ 9
 esDescifrado :: String -> String -> Bool
