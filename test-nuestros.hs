@@ -23,23 +23,22 @@ allTests = test [
     "combinacionesVigenere" ~: testsEjcombinacionesVigenere
     ]
 
---eje 1
+{-eje 1
+parametros y factores: c
+categoria: tipo de caracter
+elecciones: minusculas, mayusculas, numeros y simbolos
+-}
 testsEjesMinuscula = test [
-    esMinuscula 'd' ~?= True,
-    esMinuscula 'a' ~?= True,
-    esMinuscula 'z' ~?= True,
-    esMinuscula 'ñ' ~?= False,
-    esMinuscula 'ó' ~?= False,
-    esMinuscula 'á' ~?= False,
-    esMinuscula 'é' ~?= False,
-    esMinuscula 'í' ~?= False,
-    esMinuscula 'ú' ~?= False,
-    esMinuscula 'A' ~?= False,
-    esMinuscula 'Z' ~?= False,
-    esMinuscula 'Á' ~?= False,
-    esMinuscula '1' ~?= False,
-    esMinuscula '@' ~?= False,
-    esMinuscula ' ' ~?= False
+    "primerCaracterMinuscula"~:esMinuscula 'a' ~?= True,
+    "ultimoCaracterMinuscula"~:esMinuscula 'z' ~?= True,
+    "noEsMinusculas"~:esMinuscula 'ñ' ~?= False,
+    "vocalConTilde"~:esMinuscula 'ó' ~?= False,
+    "primerCaracterMayuscula"~:esMinuscula 'A' ~?= False,
+    "ultimoCaracterMayuscula"~:esMinuscula 'Z' ~?= False,
+    "combinaTildeYMayuscula"~:esMinuscula 'Á' ~?= False,
+    "numero"~:esMinuscula '1' ~?= False,
+    "simbolo"~:esMinuscula '@' ~?= False,
+    "caracterVacio"~:esMinuscula ' ' ~?= False
     ]
 
 {-eje 2
@@ -48,10 +47,8 @@ categoria: es  no minuscula
 elecciones: si->restricción=numero correspondiente, no->error
 -}
 testsEjletraANatural = test [
-    letraANatural 'a' ~?= 0,
-    letraANatural 'b' ~?= 1,
-    letraANatural 'z' ~?= 25,
-    letraANatural 'y' ~?= 24
+    "primerCaracter"~:letraANatural 'a' ~?= 0,
+    "ultimoCaracter"~:letraANatural 'z' ~?= 25
     ]
 
 {-eje 3
@@ -68,100 +65,82 @@ elecciones:
 ademas, pruebo por errores off by one
 -}
 testsEjdesplazar = test [
-    desplazar 'a' 3 ~?= 'd',
-    desplazar 'a' 26 ~?= 'a',
-    desplazar 'a' (54*26+6) ~?= 'g',
-    desplazar 'a' (54*26-6) ~?= 'u',
-    desplazar 'a' (-54*26-6) ~?= 'u',
-    desplazar 'a' (-54*26+6) ~?= 'g',
-    desplazar 'a' (-1) ~?= 'z',
-    desplazar 'a' 0 ~?= 'a',
-    desplazar 'z' 0 ~?= 'z',
-    desplazar 'z' 1 ~?= 'a',
-    desplazar 'm' 5 ~?= 'r',
-    desplazar 'm' (-5) ~?= 'h'
+    "desplazaraPrimerCaracter"~:desplazar 'a' 3 ~?= 'd',
+    "mismaLetra"~:desplazar 'f' 26 ~?= 'f',
+    "noDesplazar"~:desplazar 'a' 0 ~?= 'a',
+    "deplazarMasDe26Lugares"~:desplazar 'a' (54*26-6) ~?= 'u',
+    "desplazarParaAtras"~:desplazar 'a' (-1) ~?= 'z',
+    "desplazarUltimoCaracter"~:desplazar 'z' 1 ~?= 'a',
+    "simbolo"~:desplazar '@' 5 ~?= '@'
     ]
 
---eje 4
+{-eje 4
+parametros y factores: s, n
+-}
 testsEjcifrar = test [
-    cifrar "computacion" 3 ~?= "frpsxwdflrq",
-    cifrar "computacion" 0 ~?= "computacion",
-    cifrar "" 3 ~?= "",
-    cifrar "" 0 ~?= "",
-    cifrar "computacIon" 3 ~?= "frpsxwdfIrq",
-    cifrar "computacIon" 29 ~?= "frpsxwdfIrq",
-    cifrar "computacIon" 55 ~?= "frpsxwdfIrq"
+    "noCifra"~:cifrar "computacion" 0 ~?= "computacion",
+    "StringVacio"~:cifrar "" 3 ~?= "",
+    "StringConTodoMayusculas"~:cifrar "DATAWIZARDS" 45 ~?= "DATAWIZARDS",
+    "rotandoLasLetras"~:cifrar "computacIon" 29 ~?= "frpsxwdfIrq"   
     ]
 
--- eje 5
+{- eje 5
+parametros y factores: s, n
+-}
 testsEjdescifrar = test [
-    descifrar "frpsxwdflrq" 3 ~?= "computacion",
-    descifrar "computacion" 0 ~?= "computacion",
-    descifrar "" 3 ~?= "",
-    descifrar "" 0 ~?= "",
-    descifrar "frpsxwdfIrq" 3 ~?= "computacIon",
-    descifrar "frpsxwdfIrq" 29 ~?= "computacIon",
-    descifrar "frpsxwdfIrq" 55 ~?= "computacIon"
+    "noDescifra"~:descifrar "frpsxwdflrq" 0 ~?= "frpsxwdflrq", 
+    "StringVacio"~:descifrar "" 3 ~?= "",
+    "descifraRotandoMasDe26"~:descifrar "frpsxwdfIrq" 55 ~?= "computacIon"
     ]
 
---eje 6
-testsEjcifrarLista = test [
-    cifrarLista ["compu", "labo", "intro"] ~?= ["compu", "mbcp", "kpvtq"],
-    cifrarLista [] ~?= [],
-    cifrarLista ["compu"]  ~?= ["compu"],
-    cifrarLista ["compu","compu","compu"]  ~?= ["compu","dpnqv","eqorw"],
-    cifrarLista ["compu","compu","compu","labo","haskell","felipe","silla","mesa","mouse","compu","mesa","intro","labo"]  ~?= 
-                ["compu","dpnqv","eqorw","oder","lewoipp","kjqnuj","yorrg","tlzh","uwcam","lxvyd","wock","tyecz","xmna"]
+{-eje 6
+parametros y factores: ls
+-}
+testsEjcifrarLista = test [    
+    "listaVacio"~:cifrarLista [] ~?= [],
+    "cifrarConMAyuscula"~:cifrarLista ["compu","comPu"] ~?= ["compu","dpnPv"],
     "vuelta al abecedario"~:cifrarLista ["compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu"] ~?=
                 ["compu","dpnqv","eqorw","frpsx","gsqty","htruz","iusva","jvtwb","kwuxc","lxvyd","mywze","nzxaf","oaybg","pbzch","qcadi","rdbej","secfk","tfdgl","ugehm","vhfin","wigjo","xjhkp","ykilq","zljmr","amkns","bnlot","compu","dpnqv","eqorw","frpsx"]
     ]
 
---eje 7
--- Creo que hay casos de prueba de mas
+{-eje 7
+parametros y factores: s
+-}
 testsEjfrecuencia = test [
--- El falla viene porque la longitud de res es igual a 26.
-    expectlistProximity (frecuencia "taller") [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336,0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    -- La longitud de res no es igual a 26 y todas las posiciones de res no tienen el valor 0.
-    expectlistProximity (frecuencia "1") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    -- La longitud de res no es igual a 26 y todas las posiciones de res no tienen el valor 0.
-    expectlistProximity (frecuencia "@") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "tAller") [0.0,0.0,0.0,0.0,20.0,0.0,0.0,0.0,0.0,0.0,0.0,40.0,0.0,0.0,0.0,0.0,0.0,20.0,0.0,20.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "á") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "Á") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "Z") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "A") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "ñ") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "é") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "í") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "ó") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "ú") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
- -- La falla (15) se da mayormente por la longitud de la lista
+    "StringVacio" ~:frecuencia "" ~?= [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+    "StringConNumeroYsimboloYMayusculaYTilde" ~:frecuencia "á1$#@MAD" ~?= [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+    "ñ"~:frecuencia "ñ" ~?= [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+    "casoVase"~:frecuencia "taller" ~?= [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336, 0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0]
     ]
 
---eje 8
+{-eje 8
+parametros y factores: s, n
+-}
 testsEjcifradoMasFrecuente = test [
-    cifradoMasFrecuente "HHa" 5 ~?= ('f', 100.0)
-    cifradoMasFrecuente "rosa54@+/" 2 ~?= ('t', 25.0)
-    cifradoMasFrecuente "y" 3 ~?= ('b', 100.0)
-    cifradoMasFrecuente "taller" 3 ~?= ('o', 33.333336)
+    "palabraConMayusculas"~:cifradoMasFrecuente "HHa" 5 ~?= ('f', 100.0),
+    "palabraConSimboloYNumero"~:cifradoMasFrecuente "rosa54@+/" 2 ~?= ('t', 25.0),
+    "rotadoLaPalabra"~:cifradoMasFrecuente "y" 3 ~?= ('b', 100.0)
     ]
 
---eje 9
+{-eje 9
+parametros y factores: s1, s2
+-}
 testsEjesDescifrado = test [
-    esDescifrado "" "" ~?= True
-    esDescifrado "" "ala" ~?= False
-    esDescifrado "taller" "compu" ~?= False
-    esDescifrado "COLA@" "COLA@" ~?= True
+    "casoVacio"~:esDescifrado "" "" ~?= True,
+    "True"~:esDescifrado "computacIon" "frpsxwdfIrq" ~?= True,
+    "False"~:esDescifrado "taller" "compu" ~?= False
     ]
 
---eje 10
--- PREGUTNAR EN CLASE SI EL SEGUNDOCASO DE TEST ES CORRECTO
+{-eje 10
+parametros y factores: ls
+-}
 testsEjtodosLosDescifrados = test [
-    todosLosDescifrados [] ~?= []
-    todosLosDescifrados ["compu", "frpsx", "mywza"] ~?= [("compu", "frpsx"), ("frpsx", "compu")],
-    todosLosDescifrados ["hola", "hola", cifrar "hola" 2] ~?= [("hola","jqnc"),("jqnc","hola"),("hola","jqnc"),("jqnc","hola")] 
+    "casovacio"~:todosLosDescifrados [] ~?= [],
+    "conRelacion"~:todosLosDescifrados ["compu", "frpsx", "mywza"] ~?= [("compu", "frpsx"), ("frpsx", "compu")],
+    "sinRelacion"~:todoslosDescifrados ["comu", "plata", "moneda"] ~?= [],
+    todosLosDescifrados ["compu", "frpsx", "mywza", "frpsxwdfIrq", "computacIon" ] ~?= [("compu", "frpsx"), ("frpsx", "compu"), ("frpsxwdfIrq", "computacIon"), ("computacIon", "frpsxwdfIrq")]
     ]
+
 
 {-eje 11
 parametros y factores: clave, n
