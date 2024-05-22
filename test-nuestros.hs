@@ -112,6 +112,8 @@ testsEjcifrarLista = test [
     cifrarLista ["compu","compu","compu"]  ~?= ["compu","dpnqv","eqorw"],
     cifrarLista ["compu","compu","compu","labo","haskell","felipe","silla","mesa","mouse","compu","mesa","intro","labo"]  ~?= 
                 ["compu","dpnqv","eqorw","oder","lewoipp","kjqnuj","yorrg","tlzh","uwcam","lxvyd","wock","tyecz","xmna"]
+    "vuelta al abecedario"~:cifrarLista ["compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu","compu"] ~?=
+                ["compu","dpnqv","eqorw","frpsx","gsqty","htruz","iusva","jvtwb","kwuxc","lxvyd","mywze","nzxaf","oaybg","pbzch","qcadi","rdbej","secfk","tfdgl","ugehm","vhfin","wigjo","xjhkp","ykilq","zljmr","amkns","bnlot","compu","dpnqv","eqorw","frpsx"]
     ]
 
 --eje 7
