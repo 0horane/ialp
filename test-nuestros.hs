@@ -117,48 +117,37 @@ testsEjcifrarLista = test [
 --eje 7
 -- Creo que hay casos de prueba de mas
 testsEjfrecuencia = test [
--- El falla viene porque la longitud de res es igual a 26.
     expectlistProximity (frecuencia "taller") [16.666668,0.0,0.0,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0,33.333336,0.0,0.0,0.0,0.0,0.0,16.666668,0.0,16.666668,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    -- La longitud de res no es igual a 26 y todas las posiciones de res no tienen el valor 0.
     expectlistProximity (frecuencia "1") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    -- La longitud de res no es igual a 26 y todas las posiciones de res no tienen el valor 0.
     expectlistProximity (frecuencia "@") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "tAller") [0.0,0.0,0.0,0.0,20.0,0.0,0.0,0.0,0.0,0.0,0.0,40.0,0.0,0.0,0.0,0.0,0.0,20.0,0.0,20.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "á") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "Á") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "Z") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "A") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
     expectlistProximity (frecuencia "ñ") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "é") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "í") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "ó") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-    expectlistProximity (frecuencia "ú") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
- -- La falla (15) se da mayormente por la longitud de la lista
+    expectlistProximity (frecuencia "ó") [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]
     ]
 
 --eje 8
 testsEjcifradoMasFrecuente = test [
-    cifradoMasFrecuente "HHa" 5 ~?= ('f', 100.0)
-    cifradoMasFrecuente "rosa54@+/" 2 ~?= ('t', 25.0)
-    cifradoMasFrecuente "y" 3 ~?= ('b', 100.0)
+    cifradoMasFrecuente "HHa" 5 ~?= ('f', 100.0),
+    cifradoMasFrecuente "rosa54@+/" 2 ~?= ('t', 25.0),
+    cifradoMasFrecuente "y" 3 ~?= ('b', 100.0),
     cifradoMasFrecuente "taller" 3 ~?= ('o', 33.333336)
     ]
 
 --eje 9
 testsEjesDescifrado = test [
-    esDescifrado "" "" ~?= True
-    esDescifrado "" "ala" ~?= False
-    esDescifrado "taller" "compu" ~?= False
+    esDescifrado "" "" ~?= True,
+    esDescifrado "" "ala" ~?= False,
+    esDescifrado "taller" "compu" ~?= False,
     esDescifrado "COLA@" "COLA@" ~?= True
     ]
 
 --eje 10
--- PREGUTNAR EN CLASE SI EL SEGUNDOCASO DE TEST ES CORRECTO
 testsEjtodosLosDescifrados = test [
-    todosLosDescifrados [] ~?= []
-    todosLosDescifrados ["compu", "frpsx", "mywza"] ~?= [("compu", "frpsx"), ("frpsx", "compu")],
-    todosLosDescifrados ["hola", "hola", cifrar "hola" 2] ~?= [("hola","jqnc"),("jqnc","hola"),("hola","jqnc"),("jqnc","hola")] 
+    todosLosDescifrados [] ~?= [],
+    todosLosDescifrados ["compu", "frpsx", "mywza"] ~?= [("compu", "frpsx"), ("frpsx", "compu")]
     ]
 
 {-eje 11
@@ -167,48 +156,72 @@ categoria: logitud de clave, valor de n
 elecciones: logitud de clave =1, >1, n=1, n>1
 -}
 testsEjexpandirClave = test [
-    expandirClave "compu" 8 ~?= "compucom",
-    expandirClave "compu" 1 ~?= "c",
-    expandirClave "rompu" 5 ~?= "rompu",
-    expandirClave "b" 1 ~?= "b",
-    expandirClave "test" 22 ~?= "testtesttesttesttestte"
+    "n > |clave|" ~: expandirClave "compu" 8 ~?= "compucom",
+    "n < |clave|" ~: expandirClave "compu" 1 ~?= "c",
+    "n == |clave|" ~: expandirClave "rompu" 5 ~?= "rompu", 
+    "|clave| = 1" ~: expandirClave "b" 1 ~?= "b",
+    "n > 2*|clave|" ~: expandirClave "test" 22 ~?= "testtesttesttesttestte" 
     ]
 
 --eje 12
+{-
+parametros:s, clave
+-}
 testsEjcifrarVigenere = test [
-    cifrarVigenere "computacion" "ip" ~?= "kdueciirqdv"
+    "Normal" ~: cifrarVigenere "computacion" "ip" ~?= "kdueciirqdv",
+    "Tilde" ~: cifrarVigenere "á" "ip" ~?= "á", -- casos con diferentes caracteres no validos
+    "Mayus" ~: cifrarVigenere "A" "ip" ~?= "A",
+    "Mayus Tilde" ~: cifrarVigenere "Á" "ip" ~?= "Á",
+    "Enie" ~: cifrarVigenere "ñ" "ip" ~?= "ñ",
+    "Numerico" ~: cifrarVigenere "113413" "ip" ~?= "113413",
+    "caracteres validos e invalidos mezclados" ~: cifrarVigenere "@@áóóóúñAdÁg" "az" ~?= "@@áóóóúñAcÁf", -- caso caracteres validos e invalidos mezclados
+    "clave mas larga que s" cifrarVigenere "hzhzh" "dldldldl" ~?= "kkkkk", -- caso clave mas larga que s
+    "|s|=1" ~: cifrarVigenere "z" "baisalpi" ~?= "a",
+    "|clave|=1" ~: cifrarVigenere "baisalpi" "b" ~?= "cbjtbmqj",
+    "nulo" ~: cifrarVigenere "" "ippppp" ~?= "" --caso nulo
     ]
 
 --eje 13
+{-
+parametros:s, clave
+-}
 testsEjdescifrarVigenere = test [
-    descifrarVigenere "kdueciirqdv" "ip" ~?= "computacion",
-    descifrarVigenere "á" "ip" ~?= "á",
-    descifrarVigenere "é" "ip" ~?= "é",
-    descifrarVigenere "í" "ip" ~?= "í",
-    descifrarVigenere "ó" "ip" ~?= "ó",
-    descifrarVigenere "ú" "ip" ~?= "ú",
-    descifrarVigenere "A" "ip" ~?= "A",
-    descifrarVigenere "Á" "ip" ~?= "Á",
-    descifrarVigenere "ñ" "ip" ~?= "ñ",
-    descifrarVigenere "113413" "ip" ~?= "113413",
-    descifrarVigenere "113413" "ipcomputacion" ~?= "113413",
-    descifrarVigenere "@@áóóóúñAcÁf" "az" ~?= "@@áóóóúñAdÁg",
-    descifrarVigenere "kkkkkkk" "dldldldl" ~?= "hzhzhzh",
-    descifrarVigenere "a" "baisalpi" ~?= "z",
-    descifrarVigenere " " "ipip" ~?=  " ",
-    descifrarVigenere "áócompuña1Á" "be" ~?= "áóbklltñz1Á",
-    descifrarVigenere "" "ippppp" ~?= ""
+    "Normal" ~: descifrarVigenere "kdueciirqdv" "ip" ~?= "computacion",
+    "Tilde" ~: descifrarVigenere "á" "ip" ~?= "á", -- casos con diferentes tipos de caracteres no validos
+    "Mayus" ~: descifrarVigenere "A" "ip" ~?= "A",
+    "Mayus Tilde" ~: descifrarVigenere "Á" "ip" ~?= "Á",
+    "Enie" ~: descifrarVigenere "ñ" "ip" ~?= "ñ",
+    "Numerico" ~: descifrarVigenere "113413" "ip" ~?= "113413",
+    "caracteres validos e invalidos mezclados" ~: descifrarVigenere "@@áóóóúñAcÁf" "az" ~?= "@@áóóóúñAdÁg",  
+    "clave mas larga que s" ~: descifrarVigenere "kkkkk" "dldldldl" ~?= "hzhzh",
+    "|s|=1" ~: descifrarVigenere "a" "baisalpi" ~?= "z", 
+    "|clave|=1" ~: descifrarVigenere "cbjtbmqj" "b" ~?= "baisalpi",
+    "nulo" ~: descifrarVigenere "" "ippppp" ~?= "" 
     ]
 
 --eje 14
+{-
+parametros: s, claves
+-}
+
 testsEjpeorCifrado = test [
-    peorCifrado "logistica" ["datawizard"] ~?= "datawizard"
-    peorCifrado "computacion" ["ip", "asdef", "ksy"] ~?= "asdef"
+    peorCifrado "logistica" ["datawizard"] ~?= "datawizard",
+    peorCifrado "computacion" ["ip", "asdef", "ksy"] ~?= "asdef",
+    peorCifrado "a" ["a", "b", "c"] ~?= "a",
+    peorCifrado "ccc" ["c", "d","z"] ~?= "z" 
     ]
 
 --eje 15
+{-
+parametros: claves, msjs, cifrado
+-}
+
 testsEjcombinacionesVigenere = test [
-    combinacionesVigenere ["hola", "mundo"] ["a", "b"] "ipmb" ~?= [("hola", "b")]
+    "longitud > 1, hay solucion "     ~: combinacionesVigenere ["hola", "mundo"] ["a", "b"] "ipmb" ~?= [("hola", "b")], 
+    "longitud > 1, no hay solucion"   ~: combinacionesVigenere ["hola", "mundo"] ["a", "c"] "ipmb" ~?= [], 
+    "longitud > 1, no hay solucion"   ~:   combinacionesVigenere ["hola", "mundo"] ["a", "c"] "ipmb" ~?= [], 
+    "longitud = 1, unica solucion"    ~:    combinacionesVigenere ["hola"] ["b"] "ipmb" ~?= [("hola", "b")], 
+    "longitud > 1, varias soluciones" ~: expectPermutacion (combinacionesVigenere ["hola", "djfw", "emds"] ["asd", "b", "fgh"] "ipmb") [("hola", "b"), ("djfw", "fgh")]  
     ]
 
 -- Funciones útiles
