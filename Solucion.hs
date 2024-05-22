@@ -17,7 +17,7 @@ import Data.Char
 abecedario :: String 
 abecedario = "abcdefghijklmnopqrstuvwxyz"
 
-posicion :: Char -> [Char] -> Int
+posicion :: (Eq t) => t -> [t] -> Int
 posicion letra [] = 0
 posicion letra (x:xs) | letra == x = 0
                       | otherwise = 1 + posicion letra xs
