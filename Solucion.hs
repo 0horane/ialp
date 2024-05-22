@@ -32,7 +32,7 @@ soloMinusculas "" = ""
 soloMinusculas (x:xs) | esMinuscula x = x:soloMinusculas xs
                       | otherwise = soloMinusculas xs
 
---para que el índice arranque en la primera posic
+--para que el índice arranque en la primera posición, m = 0
 indice :: (Eq t) => [t] -> Int -> Int -> t
 indice [x] _ _ = x
 indice (x:xs) n m | n == m = x
