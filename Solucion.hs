@@ -80,7 +80,7 @@ cifrar (x:xs) n = desplazar x n : cifrar xs n
 -- No es necesario usar guardas porque desplazar ya se fija si es minuscula
 descifrar :: String -> Int -> String
 descifrar "" _ = ""
-descifrar (letra:letras) despNum = desplazar letra (-despNum):descifrar letras despNum  
+descifrar (x:xs) n = desplazar x (-n):descifrar xs n  
 
 
 -- EJ 6
