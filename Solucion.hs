@@ -12,7 +12,6 @@ import Data.Char
 -- Integrante3: { 95272420,Luis Enrrique Roncal Aranda}
 -- Integrante4: { 39463400,Nicolás Epstein}
 
--- Pendientes: corregir tests, 8/10/14/15, reescribir ejercicio 3 
 
 -- AUXILIARES REUSABLES
 abecedario :: String 
@@ -53,18 +52,23 @@ letraANatural :: Char -> Int
 letraANatural letra = posicion letra abecedario
 
 
+
 -- EJ 3
 desplazar :: Char -> Int -> Char
-desplazar letra n | esMinuscula letra = naturalALetradesplazada (letraANatural letra) n
+desplazar letra n | esMinuscula letra = naturalALetradesplazada (letraANatural letra + n) 
                   | otherwise = letra
 
 -- esta funcion toma un valor de un caracted de letraANatural, le suma el desplazamiento, y calcula su valor
 -- No confundir la variable posicion con la funcion posicion de arriba.
-naturalALetradesplazada :: Int -> Int -> Char 
-naturalALetradesplazada posicion n 
-                      | posicion + n <= -1 = naturalALetradesplazada (posicion + n + 26) 0
-                      | posicion + n >= 26 = naturalALetradesplazada (posicion + n - 26) 0
-                      | otherwise = chr (posicion + n + (ord 'a'))
+naturalALetradesplazada :: Int -> Char 
+naturalALetradesplazada posicion
+                      | posicion <= -1 = naturalALetradesplazada (posicion + 26)
+                      | posicion >= 26 = naturalALetradesplazada (posicion - 26)
+                      | otherwise = naturalALetra posicion
+
+naturalALetra :: Int -> Char
+naturalALetra natural = indice abecedario natural 0
+
 
 -- EJ 4
 cifrar :: String -> Int -> String

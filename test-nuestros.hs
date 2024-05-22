@@ -120,7 +120,7 @@ parametros y factores: s, n
 -}
 testsEjcifradoMasFrecuente = test [
     "palabraConMayusculas"~:cifradoMasFrecuente "HHa" 5 ~?= ('f', 100.0),
-    "palabraConSimboloYNumero"~:cifradoMasFrecuente "rosa54@+/" 2 ~?= ('t', 25.0),
+    "palabraConSimboloYNumero"~: expectAnyTuplaAprox (cifradoMasFrecuente "rosa54@+/" 2) [('c', 25.0),('q', 25.0),('u', 25.0),('t', 25.0)],
     "rotadoLaPalabra"~:cifradoMasFrecuente "y" 3 ~?= ('b', 100.0),
     "LetraRepetida" ~: cifradoMasFrecuente "taller" 3 ~?= ('o', 33.333336)
     ]
@@ -140,9 +140,9 @@ parametros y factores: ls
 -}
 testsEjtodosLosDescifrados = test [
     "casovacio"~:todosLosDescifrados [] ~?= [],
-    "conRelacion"~:todosLosDescifrados ["compu", "frpsx", "mywza"] ~?= [("compu", "frpsx"), ("frpsx", "compu")],
+    "conRelacion"~: expectPermutacion (todosLosDescifrados ["compu", "frpsx", "mywza"] ) [("compu", "frpsx"), ("frpsx", "compu")],
     "sinRelacion"~:todosLosDescifrados ["comu", "plata", "moneda"] ~?= [],
-    todosLosDescifrados ["compu", "frpsx", "mywza", "frpsxwdfIrq", "computacIon" ] ~?= [("compu", "frpsx"), ("frpsx", "compu"), ("frpsxwdfIrq", "computacIon"), ("computacIon", "frpsxwdfIrq")]
+    expectPermutacion (todosLosDescifrados ["compu", "frpsx", "mywza", "frpsxwdfIrq", "computacIon" ] ) [("compu", "frpsx"), ("frpsx", "compu"), ("frpsxwdfIrq", "computacIon"), ("computacIon", "frpsxwdfIrq")]
     ]
 
 
@@ -198,6 +198,8 @@ testsEjdescifrarVigenere = test [
 --eje 14
 {-
 parametros: s, claves
+--admite uno de varios resultados posibles. todos nestos casos tienen solo un resultado posible. 
+
 -}
 
 testsEjpeorCifrado = test [
