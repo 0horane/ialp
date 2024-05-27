@@ -25,9 +25,30 @@ def filas_ordenadas(s:list[list[int]], res:list[bool] ):
         res.append(ej1.ordenados(x))
 
 import numpy as np
-matrix:list[list[int]] = np.random.randint(1,5,(3, 3))
 
 
-def mult(a:list[list[int]], b:list[list[int]]):
-    rmat:list[list[int]] = []
-    for y in 
+# require: potencia>=2, tamanio>=1
+def matrizAzarTamanioAPotencia(tamanio:int, potencia:int) -> list[list[int]]:
+    matrix:list[list[int]] = np.random.randint(2,3,(tamanio, tamanio))
+
+    # evita tener que hacer una copia profunda
+    # .todo esto seria mas facil si se pudiera hacer slicing 
+    matrixmult:list[list[int]] = mult(matrix, matrix) 
+    
+    for x in range(potencia-2):
+        matrixmult = mult(matrixmult, matrix)
+    return matrixmult
+
+def mult(a:list[list[int]], b:list[list[int]]) -> list[list[int]]:
+    rmat:list[list[int]] = [] # = np.zeros((len(a), len(b[0])))
+    for y in range (0,len(a)):
+        rmat.append([0]*len(b[0]))
+
+    #xa = yb
+
+    for xb in range(0,len(b[0])):
+        for ya in range(0,len(a)):
+            for xayb in range(0,len(b)):
+                rmat[ya][xb] += a[ya][xayb] * b[xayb][xb]
+    return rmat
+    
