@@ -531,20 +531,34 @@ tell attatches a string to the log with no change
 difflist as an example..........
 
 
+functios as monads
+(reader) idk honestly. reread?
 
+state monad
+a stateful computation would have a type of :: state -> (value, state). value = () if all we do is change state. 
+Control.Monad.state
+runState
+get gets statate value 
+put replaces state value
 
+Control.Monad.Error has either as a monad
+liftM  is equivalent to fmap 
+ap === <*>
+liftM2 == liftA2
 
+join flattens recursive monads
 
+join (fmap f m) = m >>= f
 
+filterM :: (Monad m) => (a -> m Bool) -> [a] -> m [a]  
 
+powerset xs = filterM (\x -> [True, False]) xs  
 
+foldM :: (Monad m) => (a -> b -> m a) -> a -> [b] -> m a  === foldl
 
+reads returns [item] for successfull read and [] otherwise
 
-
-
-
-
-
+rational in data.Ratio, using %
 
 
 
@@ -560,5 +574,6 @@ https://stackoverflow.com/questions/8237645/how-to-add-linux-executable-files-to
 https://stackoverflow.com/questions/5711120/gitignore-binary-files-that-have-no-extension/19749478#19749478
 https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks
 https://git-scm.com/book/en/v2/Customizing-Git-An-Example-Git-Enforced-Policy#_an_example_git_enforced_policy
+
 
 
