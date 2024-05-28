@@ -1,0 +1,3 @@
+en python 3.8: from typing import List, Dict, Tuple
+en python 9: es en minuscula sin importar
+
