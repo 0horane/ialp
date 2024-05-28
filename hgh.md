@@ -5,7 +5,7 @@ Teorema de fermat V2
 sea $a \in \mathbb Z$, $p \in \mathbb  N$, $(a:p)=1$
 entonces $a^{p-1}\equiv 1 \mod p$ 
 
-pseudoprimos tambien lo cumplen sin ser primos, no es doble implicación.  vvvvv       
+pseudoprimos tambien lo cumplen sin ser primos, no es doble implicación.         
 
 sirve para resolver ejercicios como: Hallar el resto de $2^{319}$ en la division por 5
 Ej.
@@ -14,7 +14,7 @@ Cada 4 (p-1) 2 son congruentes mod 5 a 1
 se pueden hacer 79. Entonces $2^{319} \equiv 2^{3} \equiv 3 \mod 5$ 
 
 Propiedad en general:
-Prop: sea  $a$ un entero, $b$ un natural primo, $(a:b)=1$, $k,r \in \mathbb N+\{0\}$
+Prop: sea  $a$ un entero, $b$ un natural primo, $(a:b)=1$, $k,r \in \mathbb N_0$ 
 si $k \equiv r \mod (p-1) \implies a^k\equiv a^r \mod (p)$
 
 Dem:
@@ -28,18 +28,16 @@ $a=30, b=7$ 7 primo, $(a:b)=1$
 entonces por prop si $m\equiv r \mod 6 \implies 30^n\equiv 30^r \mod 7$
 Vamos a hacer tabla entonces
 
-m(6)   30^n
-0           1
-1           2
-2           4 si $30 \equiv 2 \implies 30^2 \equiv 2^2$
-3          1
-4          2 = $30^1+30^3$
-5          4 = $30^3+30^2$ 
+| m(6) | 30^n (7)                                    |
+| ---- | ------------------------------------------- |
+| 0    | 1                                           |
+| 1    | 2                                           |
+| 2    | 4 si $30 \equiv 2 \implies 30^2 \equiv 2^2$ |
+| 3    | 1                                           |
+| 4    | 2 = $30^1 \cdot 30^3$                       |
+| 5    | 4 = $30^3 \cdot 30^2$                       |
 
 Entonces, nos sirven los congruentes a 0 o 3 $\mod 6$ 
-
-Si vale que
-p primo,  $k \equiv r \mod (p-1) \implies a^r \equiv a^k \mod p$
 
 
 Ejercicio: Hallar resto de $3^{5^{1000}}$ dividio 29
@@ -56,15 +54,15 @@ $5^{1000} \equiv 2 \mod 7$
 buscar probando que son pocos
 como 4 y 7 son coprimos, TCR: $5^{1000} \equiv 9 \mod 28$
 
-Como $5^{1000} \equiv 9 \mod 28, (9:29)=1, \implies 3^{5^1000} \equiv 3^9 \mod 29$
+Como $5^{1000} \equiv 9 \mod 28, (9:29)=1, \implies 3^{5^{1000}} \equiv 3^9 \mod 29$
 $3^9 = 3^{3^3} \equiv (-2)^3 =-8 \equiv 21 \mod 29$
-s
+
 
 
 ### Anillos
 **Def**; Un anillo es un conjunto A, con dos operaciones:
  - +: $A \times A \to A$
- - $\large\cdot: A \times A \to A$
+ - ${\large \cdot}: A \times A \to A$
 notación: +(2,3)=5. No tiene porque ser numérico. 
 tales que:
 ##### Axiomas de anillos:
@@ -74,7 +72,7 @@ tales que:
  3) $\exists 0 \in A /\forall a \in A, a+0=a$ elemento neutro para suma
  4) $\forall a \in A, \exists -a / a+ (-a) = 0$ todo elemento tiene inverso aditivo
  5) $\forall a,b,c \in A (a\cdot b) \cdot c = a \cdot (b \cdot c)$ producto asociativo
- 6) $\exists 1 \in A / a \cdot 1 = a \wedge 1 \cdot a = a$ elemento neutro para producto multipllicacion no tiene que ser conmutativo como con las matrices, asi que no se deduce de las otras
+ 6) $\exists 1 \in A / a \cdot 1 = a \wedge 1 \cdot a = a$ elemento neutro para producto.
  7) $\forall a,b,c \in A, a\cdot (b+c) = a\cdot b +a \cdot c$ distributiva izquierda
  8) $\forall a,b,c \in A, (a+b)\cdot c = a\cdot c +b \cdot c$ distributiva derecha.
 
