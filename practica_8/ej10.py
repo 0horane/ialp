@@ -1,6 +1,6 @@
 from queue import LifoQueue
 
-def cantidad_elementos(p:LifoQueue[int])->int:
+def mayor_elemento(p:LifoQueue[int])->int:
     store:LifoQueue[int] = LifoQueue()
     res:int=0
     while not p.empty():

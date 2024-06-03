@@ -1,18 +1,15 @@
 from queue import LifoQueue
 
 def esta_bien_balanceada(s:str)->bool:
-    
-
-def cantidad_elementos(p:LifoQueue[int])->int:
-    store:LifoQueue[int] = LifoQueue()
-    res:int=0
-    while not p.empty():
-        item:int = p.get()
-        if item>res:
-            res = item
-        store.put(item)
-    while not store.empty():
-        p.put(store.get())
-    return res
-    
+    parentesis:int=0
+    balanceada:bool=True
+    for char in s:
+        if char == "(":
+            parentesis += 1
+        elif char == ")":
+            parentesis -= 1
+        if parentesis < 0:
+            balanceada = False
+    balanceada &= parentesis == 0 
+    return balanceada
         
