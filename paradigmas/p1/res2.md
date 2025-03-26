@@ -1,5 +1,9 @@
 me olvide de sicnronizar. unificar despues.
 
+```haskell
+sumaAlt n = sum $ zipWith (*) n (cycle [1, -1])
+```
+
 E4::
 ```haskell
 permutaciones :: [a] -> [[a]]
