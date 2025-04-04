@@ -58,6 +58,7 @@ mejorSegun f = foldr1 (\i max -> if f max i then max else i)
 sumasParciales xs = reverse $ foldl (\list i -> case list of [] -> [i]
                                                              (x:xs) -> (i+x:x:xs)) [] xs 
 sumasParciales2 xs = drop 1 . foldr (\a (x:xs) -> (x-a):x:xs ) [(sum xs)] xs
+-- map (+x) xs is the right solution 
 
 sumaAlt = foldr (-) 0
 sumaAlt2 n = sum $ zipWith (*) n (cycle [1, -1])
