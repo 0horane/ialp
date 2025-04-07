@@ -119,6 +119,18 @@ entrelazar (x:xs) ys = if null ys
 then x : entrelazar xs []
 else x : head ys : entrelazar xs (tail ys) TODO hoy vimos como se hace
  -}
+
+
+
+
+entrelazar :: [a] -> [a] -> [a]
+entrelazar [] = id
+entrelazar (x:xs) = \ys -> if null ys
+               then x : entrelazar xs []
+               else x : head ys : entrelazar xs (tail ys)
+
+
+entrelazar = foldr (\x rec -> (\ys -> if null ys then x:rec [] else x:head ys:rec (tail ys))) (const id)
 ```
 
 
