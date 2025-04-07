@@ -1,4 +1,4 @@
-use std::{collections::{vec_deque, VecDeque}, io};
+use std::{io};
 
 fn main() {
     for _caso in 0..read_line().trim().parse().unwrap() {
@@ -43,8 +43,8 @@ fn evaluar_caso() -> bool {
         return false;
     }
 
-    let mut ramas_por_explorar :VecDeque<_> =  [(0, 0, 0)].into();
-    while let Some((ypos, xpos, temp)) = ramas_por_explorar.pop_front() {
+    let mut ramas_por_explorar = vec![(0, 0, 0)];
+    while let Some((ypos, xpos, temp)) = ramas_por_explorar.pop() {
         let newtemp = matrix[ypos][xpos] + temp;
         if temperaturas_posibles[ypos][xpos].contains(&newtemp) {
             continue;
@@ -53,12 +53,29 @@ fn evaluar_caso() -> bool {
             return true;
         }
         temperaturas_posibles[ypos][xpos].push(newtemp);
-        if !(ypos == n - 1) {
-            ramas_por_explorar.push_back((ypos + 1, xpos, newtemp));
-        } else {
-        }
-        if !(xpos == m - 1) {
-            ramas_por_explorar.push_back((ypos, xpos + 1, newtemp));
+
+        if !(ypos == n - 1) && !(xpos == m - 1 ) {
+            if newtemp > 0 {
+                if matrix[ypos+1][xpos] > matrix[ypos][xpos+1]{
+                    ramas_por_explorar.push((ypos + 1, xpos, newtemp));
+                    ramas_por_explorar.push((ypos, xpos + 1, newtemp));
+                } else {
+                    ramas_por_explorar.push((ypos, xpos + 1, newtemp));
+                    ramas_por_explorar.push((ypos + 1, xpos, newtemp));
+                }
+            } else {
+                if matrix[ypos+1][xpos] > matrix[ypos][xpos+1]{
+                    ramas_por_explorar.push((ypos, xpos + 1, newtemp));
+                    ramas_por_explorar.push((ypos + 1, xpos, newtemp));
+                } else {
+                    ramas_por_explorar.push((ypos + 1, xpos, newtemp));
+                    ramas_por_explorar.push((ypos, xpos + 1, newtemp));
+                }
+            }
+        } else if !(ypos == n - 1) {
+            ramas_por_explorar.push((ypos + 1, xpos, newtemp));
+        } else  if !(xpos == m - 1) {
+            ramas_por_explorar.push((ypos, xpos + 1, newtemp));
         }
     }
     return false;
