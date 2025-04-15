@@ -80,15 +80,22 @@ zip’ :: [a] -> [b] -> [(a,b)]
 zip' = zip
 por extensionalidad funcional:
 ∀xs:[a]∀ys:[b].zip' xs ys = zip xs ys
-Inducción sobre xs
-CB: ∀ys.zip [] ys = zip' [] ys
+Inducción sobre ys
+CB: ∀xs.zip xs [] = zip' xs []
 
-zip’ [] ys
-[] {z'1}
+zip’ xs []
+if null [] then [] else (x,head ys):zip' xs (tail ys) {z'1}
+[] {if logico}
 
-zip [] ys
+zip xs []
 foldr (\x rec ys ->
                     if null ys
                         then []
                         else (x, head ys) : rec (tail ys))
-                    (const []) [] ys {z0}
+                    (const []) xs [] {z0}
+
+foldr (\x rec ys ->
+                    if null ys
+                        then []
+                        else (x, head ys) : rec (tail ys))
+                    (const []) xs [] {}
