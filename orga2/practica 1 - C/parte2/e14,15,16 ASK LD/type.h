@@ -6,7 +6,7 @@ typedef enum e_type {
     TypeFAT32 = 0,
     TypeEXT4 = 1,
     TypeNTFS = 2
-    } type_t;
+} type_t;
 
     typedef uint32_t fat32_t;
     typedef uint32_t ext4_t;

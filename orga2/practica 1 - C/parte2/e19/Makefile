@@ -14,7 +14,4 @@ $(TARGET).o: $(TARGET).c
 clean: 
 	rm *.o $(TARGET)
 
-run: all
-		./main
-
 .PHONY: all clean
