@@ -32,10 +32,7 @@ alternate_sum_4:
 
 ; uint32_t alternate_sum_4_using_c(uint32_t x1, uint32_t x2, uint32_t x3, uint32_t x4);
 ; parametros: 
-; x1 --> EDI
-; x2 --> ESI
-; x3 --> EDX
-; x4 --> ECX
+
 alternate_sum_4_using_c:
   ;prologo
   push RBP ;pila alineada
@@ -97,20 +94,63 @@ alternate_sum_4_using_c_alternative:
 
 
 ; uint32_t alternate_sum_8(uint32_t x1, uint32_t x2, uint32_t x3, uint32_t x4, uint32_t x5, uint32_t x6, uint32_t x7, uint32_t x8);
-; registros y pila: x1[?], x2[?], x3[?], x4[?], x5[?], x6[?], x7[?], x8[?]
+; registros y pila:
+; x1 --> EDI
+; x2 --> ESI
+; x3 --> EDX
+; x4 --> ECX
+; x5 --> R8D
+; x6 --> R9D
+; x6 --> STACK -4
+; x7 --> STACK 0
 alternate_sum_8:
 	;prologo
+  push rbp
+  mov rbp, rsp
+  push R9
+  push r8
+  push rcx 
+  push RDX
+
+  mov r10d, edi
+  mov r11d, esi
 
 	; COMPLETAR
+  sub r10d, r11d
+  pop r11
+  add r10d, r11d
+  pop r11
+  sub r10d, r11d
+  pop r11
+  add r10d, r11d
+  pop r11
+  sub r10d, r11d
+  mov r11, [rbp + 16] ; hay que saltearse rbp 0,8, no se porque. 
+  add r10d, r11d
+  mov r11, [rbp + 24] 
+  sub r10d, r11d
+  mov eax, r10d
 
 	;epilogo
+  mov rsp, RBP
+  pop RBP
 	ret
-
+; volatiles En 64 bits: RBX, RBP, R12, R13, R14, R15
 
 ; SUGERENCIA: investigar uso de instrucciones para convertir enteros a floats y viceversa
 ;void product_2_f(uint32_t * destination, uint32_t x1, float f1);
 ;registros: destination[?], x1[?], f1[?]
 product_2_f:
+  push rbp
+  mov rbp, rsp
+
+  CVTSI2SS xmm1, ESI
+  MULSS xmm0, xmm1
+  CVTTSS2SI rax, xmm0
+  mov dword [RDI], eax
+  
+  mov rsp, RBP
+  pop RBP
 	ret
 
 
