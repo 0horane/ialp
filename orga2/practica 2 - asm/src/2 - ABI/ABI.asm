@@ -144,9 +144,10 @@ product_2_f:
   push rbp
   mov rbp, rsp
 
-  CVTSI2SS xmm1, ESI
-  MULSS xmm0, xmm1
-  CVTTSS2SI rax, xmm0
+  CVTSI2SD xmm1, ESI
+  CVTSS2SD xmm0,xmm0
+  MULSD xmm0, xmm1
+  CVTTSD2SI rax, xmm0
   mov dword [RDI], eax
   
   mov rsp, RBP
@@ -158,22 +159,52 @@ product_2_f:
 ;, uint32_t x1, float f1, uint32_t x2, float f2, uint32_t x3, float f3, uint32_t x4, float f4
 ;, uint32_t x5, float f5, uint32_t x6, float f6, uint32_t x7, float f7, uint32_t x8, float f8
 ;, uint32_t x9, float f9);
-;registros y pila: destination[rdi], x1[?], f1[?], x2[?], f2[?], x3[?], f3[?], x4[?], f4[?]
-;	, x5[?], f5[?], x6[?], f6[?], x7[?], f7[?], x8[?], f8[?],
-;	, x9[?], f9[?]
+;registros y pila: destination[rdi], x1[ESI], f1[xmm0], x2[EDX], f2[xmm1], x3[ECX], f3[xmm2], x4[r8d], f4[xmm3]
+;	, x5[r9d], f5[xmm4], x6[stack 0], f6[xmm5], x7[stack 1], f7[xmm6], x8[stack 2], f8[xmm7],
+;	, x9[stack 3], f9[stackj 4]
 product_9_f:
 	;prologo
 	push rbp
 	mov rbp, rsp
 
-	;convertimos los flotantes de cada registro xmm en doubles
-	; COMPLETAR
+  CVTSS2SD xmm0, xmm0
+  CVTSS2SD xmm1, xmm1
+  CVTSS2SD xmm2, xmm2
+  CVTSS2SD xmm3, xmm3
+  CVTSS2SD xmm4, xmm4
+  CVTSS2SD xmm5, xmm5
+  CVTSS2SD xmm6, xmm6
+  CVTSS2SD xmm7, xmm7
+  MOVSS xmm8, [rbp+48]
+  CVTSS2SD xmm8, xmm8
 
-	;multiplicamos los doubles en xmm0 <- xmm0 * xmm1, xmmo * xmm2 , ...
-	; COMPLETAR
-
-	; convertimos los enteros en doubles y los multiplicamos por xmm0.
-	; COMPLETAR
+  MULSD xmm0, xmm1
+  MULSD xmm0, xmm2
+  MULSD xmm0, xmm3
+  MULSD xmm0, xmm4
+  MULSD xmm0, xmm5
+  MULSD xmm0, xmm6
+  MULSD xmm0, xmm7
+  MULSD xmm0, xmm8
+  CVTSI2SD xmm1, ESI
+  MULSD xmm0, xmm1
+  CVTSI2SD xmm1, EDX
+  MULSD xmm0, xmm1
+  CVTSI2SD xmm1, ECX
+  MULSD xmm0, xmm1
+  CVTSI2SD xmm1, R8D
+  MULSD xmm0, xmm1
+  CVTSI2SD xmm1, R9D
+  MULSD xmm0, xmm1
+  CVTSI2SD xmm1, [rbp + 16]
+  MULSD xmm0, xmm1
+  CVTSI2SD xmm1, [rbp + 24]
+  MULSD xmm0, xmm1
+  CVTSI2SD xmm1, [rbp + 32]
+  MULSD xmm0, xmm1
+  CVTSI2SD xmm1, [rbp + 40]
+  MULSD xmm0, xmm1
+  MOVQ [RDI], xmm0
 
 	; epilogo
 	pop rbp
