@@ -105,27 +105,10 @@ strPrint:
 	mov rbp, rsp
 
 
-
-	push rdi 
-	push rsi
-	call strLen
-
-	mov rdx, rax
-	pop rdi ; prev rsi
-	mov rdi, 1
-	pop rsi ; what was previously rdi
-	cmp rdx, 0
-	mov r10, nullmsg
-	cmove rsi, r10
-	mov r10, 4
-	cmove rdx, r10
-
-
-	; int(errupt) 80h = syscall. syscall(callnumber 1, stdout descriptor, string address, string length) 
-	mov rax, 1
-
-	syscall
-	
+	mov r10, rdi
+	mov rdi, rsi
+	mov rsi, r10
+	call fprintf
 
 	pop rbp
 	ret
