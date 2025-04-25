@@ -135,7 +135,7 @@ alternate_sum_8:
   mov rsp, RBP
   pop RBP
 	ret
-; volatiles En 64 bits: RBX, RBP, R12, R13, R14, R15
+; no volatiles En 64 bits: RBX, RBP, R12, R13, R14, R15
 
 ; SUGERENCIA: investigar uso de instrucciones para convertir enteros a floats y viceversa
 ;void product_2_f(uint32_t * destination, uint32_t x1, float f1);
