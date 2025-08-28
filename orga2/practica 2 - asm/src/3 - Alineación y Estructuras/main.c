@@ -9,5 +9,16 @@
 
 int main() {
 	/* Acá pueden realizar sus propias pruebas */
-	return 0;
+	
+	packed_nodo_t b;
+	packed_lista_t a;
+	a.head = &b;
+	b.arreglo = 1;
+	b.categoria = 2;
+	b.longitud = 3;
+	b.next = NULL;
+
+	printf("%d\n", cantidad_total_de_elementos_packed(&a));
+
+	
 }
