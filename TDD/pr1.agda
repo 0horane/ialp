@@ -90,3 +90,12 @@ proj₁ = indΣ ( λ x _  -> x )
 -- cant do pattern matching in type def! no (a , b : Σ A B). or maybe i can with {}??
 proj₂ : {A : Set} {B : A -> Set} -> (p : Σ A B) -> B (proj₁ p)
 proj₂ {A1} {B1}  x = indΣ {A1} {B1} {λ x -> B1 (proj₁ x)} (λ a b -> b) x
+
+-- to use sigma types add lambda to bind. 
+-- if i had imported data.product, you can do Σ[ x ∈ A ] B instead. which is to say, Σ[ x ∈ B ] C a b   and Σ[f ∈ A -> B ] -> (a : A) -> C a (f a)
+elección : {A B : Set} {C : A -> B -> Set} -> ((a : A) -> Σ B (λ b -> C a b)) -> Σ (A -> B) (λ f -> (a : A) -> C a (f a))
+elección g = 
+    ( (λ a -> proj₁ (g a) )
+        ,
+        (λ a -> proj₂ (g a))
+    )  
