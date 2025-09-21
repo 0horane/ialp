@@ -8,7 +8,7 @@ open import Data.Empty
 open import Data.Bool
        using (Bool; true; false)
 open import Data.Nat
-       using (ℕ; zero; suc; _+_)
+       using (ℕ; zero; suc; _+_; _*_)
 open import Data.Nat.Properties
        using (+-comm)
 open import Data.Product
@@ -142,12 +142,13 @@ data Bin : Set where
 
 -- B.1) Definir la función que convierte un número representado en binario a natural:
 bin2nat : Bin → ℕ
-bin2nat binzero      = {!!}
-bin2nat (addbit x b) = {!!}
+bin2nat binzero      = 0
+bin2nat (addbit b true) = bin2nat b * 2 + 1 
+bin2nat (addbit b false) = bin2nat b * 2 
 
 -- B.2) Definir la función sucesor sobre números naturales representados en binario:
 binsuc : Bin → Bin
-binsuc binzero          = {!!}
+binsuc binzero          = addbit binzero true
 binsuc (addbit x false) = {!!}
 binsuc (addbit x true)  = {!!}
 
@@ -177,28 +178,28 @@ transport _ refl b = b
 -- equivale a transportar por la familia B vía el camino (cong f p).
 transport-compose : {A A' : Set} (f : A → A') (B : A' → Set) {x y : A} (p : x ≡ y) (b : B (f x))
            → transport (λ x → B (f x)) p b ≡ transport B (cong f p) b
-transport-compose = {!!}
+transport-compose f B refl b = refl
 
 -- C.2) Demostrar que transportar vía la composición de dos caminos
 -- equivale a transportar separadamente vía cada uno de ellos.
 transport-∙ : {A : Set} (B : A → Set) {x y z : A} (p : x ≡ y) (q : y ≡ z) (b : B x)
            → transport B (p ∙ q) b ≡ transport B q (transport B p b)
-transport-∙ = {!!}
+transport-∙ B refl refl b = refl
 
 -- C.3) Demostrar que transportar por una familia constante es la identidad.
 transport-const : {A : Set} (B₀ : Set) {x y : A} (p : x ≡ y) (b : B₀)
                 → transport (λ _ → B₀) p b ≡ b
-transport-const = {!!}
+transport-const B refl b  = refl
 
 -- C.4) Demostrar que transportar por una familia de caminos corresponde a componer: 
 transport-path-left : {A : Set} {x y z : A} (p : x ≡ y) (q : x ≡ z)
                     → transport (λ a → a ≡ z) p q ≡ (p ⁻¹) ∙ q
-transport-path-left = {!!}
+transport-path-left refl refl = refl
 
 -- C.5) Similar pero con la composición a derecha:
 transport-path-right : {A : Set} {x y z : A} (p : x ≡ y) (q : z ≡ x)
                      → transport (λ a → z ≡ a) p q ≡ q ∙ p
-transport-path-right = {!!}
+transport-path-right refl refl = refl
 
 ---- Parte D ----
 
