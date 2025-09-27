@@ -34,20 +34,16 @@ global cantidad_total_de_elementos_packed
 ;extern uint32_t cantidad_total_de_elementos(lista_t* lista);
 ;registros: lista[RDI]
 cantidad_total_de_elementos:
-    push RBP 
-    mov RBP, RSP 
 	mov R11, [RDI]
-	mov RAX, 0 
+	mov EAX, 0 
 	cantidad_total_de_elementos_bucle:
 		cmp R11, 0
 		je cantidad_total_de_elementos_fin
-		mov r10d, [R11 + 24]
-		ADD EAX, r10d
+		ADD EAX, [R11 + 24]
 		MOV R11,[R11]
 		JMP cantidad_total_de_elementos_bucle
 	
 	cantidad_total_de_elementos_fin:
-	pop rbp
 	ret
 
 ;extern uint32_t cantidad_total_de_elementos_packed(packed_lista_t* lista);
