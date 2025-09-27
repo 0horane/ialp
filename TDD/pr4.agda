@@ -48,8 +48,15 @@ map-++ {_} {_} {f} {(x ∷ xs)} {ys} = cong (λ z -> f x ∷ z ) (map-++ {_} {_}
 -- A.2) Demostrar que map conmuta con la composición:
 map-∘ : {A B C : Set} {f : A → B} {g : B → C} {xs : List A}
        → map (g ∘ f) xs ≡ map g (map f xs)
-map-∘ = {!!}
-
+map-∘ {A} {B} {C} {f} {g} {[]} = refl
+map-∘ {A} {B} {C} {f} {g} {x ∷ xs} = 
+       (g ∘ f) x ∷ map (g ∘ f) xs
+              ≡⟨  cong (λ z → (g ∘ f) x ∷ z ) (map-∘ {A} {B} {C} {f} {g} {xs}) ⟩
+       (g ∘ f) x ∷ map g (map f xs)
+              ≡⟨ refl ⟩
+       (g (f x) ∷ map g (map f xs))
+        ∎ -- (g (f x) ∷ map g (map f xs))
+  
 -- Definimos el siguiente predicado que se verifica si un elemento
 -- aparece en una lista:
 
@@ -62,14 +69,22 @@ x ∈ (y ∷ ys) = (x ≡ y) ⊎ (x ∈ ys)
 ∈-++ : ∀ {A : Set} {z : A} {xs ys : List A}
        → z ∈ (xs ++ ys)
        → (z ∈ xs) ⊎ (z ∈ ys)
-∈-++ = {!!}
+∈-++ {A} {z} {[]} {ys} z∈++ = inj₂ z∈++
+∈-++ {A} {z} {x ∷ xs} {ys} (inj₁ z=x) = inj₁ (inj₁ z=x)
+∈-++ {A} {z} {x ∷ xs} {ys} (inj₂ z∈xs++ys) with ∈-++ {A} {z} {xs} {ys} z∈xs++ys
+... | inj₁ n =  inj₁ (inj₂ n) 
+... | inj₂ n = inj₂ n
 
+-- PREGUNTAR TODO: pq vale el with con los injs? y ese pattern matchinbg en general? por que no hay que considerar los casos ⊥?
 -- A.4) Demostrar que si un elemento z aparece en una lista xs,
 -- su imagen (f z) aparece en (map f xs):
 ∈-map : ∀ {A B : Set} {f : A → B} {z : A} {xs : List A}
         → z ∈ xs
         → f z ∈ map f xs
-∈-map = {!!}
+∈-map {A} {B} {f} {z} {[]} ()
+∈-map {A} {B} {f} {z} {x ∷ xs} (inj₁ x₁) = inj₁ (cong f x₁) 
+∈-map {A} {B} {f} {z} {x ∷ xs} (inj₂ y) = inj₂ (∈-map {A} {B} {f} {z} {xs} y) 
+
 
 -- Definimos el siguiente predicado que se verifica si todos los
 -- elementos de una lista son iguales:
@@ -83,7 +98,9 @@ todos-iguales (x ∷ (y ∷ ys)) = (x ≡ y) × todos-iguales (y ∷ ys)
 todos-iguales-map : {A B : Set} {f : A → B} {xs : List A}
                   → todos-iguales xs
                   → todos-iguales (map f xs)
-todos-iguales-map = {!!}
+todos-iguales-map {A} {B} {f} {[]} tt = tt 
+todos-iguales-map {A} {B} {f} {x ∷ []} tt = tt 
+todos-iguales-map {A} {B} {f} {x ∷ (x₁ ∷ xs)} (fst , snd) = cong f fst , todos-iguales-map {A} {B} {f} {x₁ ∷ xs} snd 
 
 -- Parte B --
 
@@ -103,25 +120,53 @@ record _≃_ (A B : Set) : Set where
 -- B.1) Demostrar que la equivalencia de tipos es reflexiva, simétrica y transitiva:
 
 ≃-refl : ∀ {A} → A ≃ A
-≃-refl = {!!}
+≃-refl {A} = record {
+  to = λ a → a ;
+  from = λ a → a ;
+  from∘to = λ a → refl ;
+  to∘from = λ a → refl
+  }
 
 ≃-sym : ∀ {A B} → A ≃ B → B ≃ A
-≃-sym = {!!}
+≃-sym record { to = to ; from = from ; from∘to = from∘to ; to∘from = to∘from } = record {
+  to = from ;
+  from = to ;
+  from∘to = to∘from ;
+  to∘from = from∘to }
 
 ≃-trans : ∀ {A B C} → A ≃ B → B ≃ C → A ≃ C
-≃-trans = {!!}
+≃-trans record { to = toAB ; from = fromAB ; from∘to = from∘toAB ; to∘from = to∘fromAB } record { to = toBC ; from = fromBC ; from∘to = from∘toBC ; to∘from = to∘fromBC }
+  = record {
+  to = λ z → toBC (toAB z) ;
+  from = λ z → fromAB (fromBC z) ;
+  from∘to = λ a → fromAB (fromBC (toBC (toAB a))) ≡⟨ cong (λ x → fromAB x ) (from∘toBC (toAB a)) ⟩ fromAB (toAB a) ≡⟨ from∘toAB a ⟩ a ∎ ;
+  to∘from = λ b → toBC (toAB (fromAB (fromBC b))) ≡⟨ cong (λ x → toBC x) (to∘fromAB (fromBC b))  ⟩ toBC (fromBC b) ≡⟨ to∘fromBC b ⟩ b ∎ }
 
 -- B.2) Demostrar que el producto de tipos es conmutativo, asociativo,
 -- y que ⊤ es el elemento neutro:
 
 ×-comm : {A B : Set} → (A × B) ≃ (B × A)
-×-comm = {!!}
+×-comm = record {
+  to = λ {(a , b) → b , a } ;
+  from = λ {(a , b) → b , a} ;
+  from∘to = λ {(a , b) → refl };
+  to∘from = λ {(a , b) → refl} }
 
+
+-- pq emacs no me ofrece refl? por que c-c no hace nada?? TODO PREGUNTAR
 ×-assoc : {A B C : Set} → (A × (B × C)) ≃ ((A × B) × C)
-×-assoc = {!!}
+×-assoc = record {
+  to = λ {(a , (b , c)) → (a , b) , c } ;
+  from = λ {((a , b) , c) → a , b , c} ;
+  from∘to = λ a → refl ;
+  to∘from = λ b → refl }
 
 ×-⊤-neut : {A : Set} → (A × ⊤) ≃ A
-×-⊤-neut = {!!}
+×-⊤-neut = record {
+  to = λ {(x , y) → x} ;
+  from = λ x → x , tt ;
+  from∘to = λ a → refl ;
+  to∘from = λ b → refl }
 
 -- B.3) Demostrar que la suma de tipos es conmutativa, asociativa,
 -- y que ⊥ es el elemento neutro:
