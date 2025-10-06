@@ -86,7 +86,7 @@ def sumL(A):
         res += elem 
     return res
 
-def esDiagonalmenteDominante(A):
+def esDiagonalmenteDominante(A): 
     if len(A) == 0:
         return True # supongo?
     
