@@ -1,18 +1,18 @@
-    lunes 18/08: Juicios y proposiciones. Funciones y funciones dependientes. Pares y pares dependientes. Tipo vacío. Tipo producto. Universos. Introducción a la teoría de tipos de Martin-Löf y lógica en Agda.
-    lunes 25/08:  Igualdad definicional vs. proposicional. Inducción en caminos. Recursión e inducción sobre números naturales. Razonamiento ecuacional.
-    lunes 01/09: Propiedades de la igualdad: estructura de ω-grupoide. Transporte. Recursión e inducción sobre números naturales (continuación).
-    Homotopía. Equivalencia de tipos. Axioma de univalencia. Recursión e inducción sobre tipos de datos inductivos.
-    lunes 15/09: Tipos contráctiles, proposiciones, conjuntos, grupoides, etc. Predicados definidos inductivamente. Equivalencia de tipos.
-    lunes 22/09: Metateoría: cálculo-lambda sin tipos. Confluencia. Lógica clásica. Equivalencia entre principios de razonamiento clásicos. Demostración de algunas equivalencias de tipos.
-    lunes 29/09: Metateoría: Punto de vista de Curry-Howard y normalización del cálculo-lambda simplemente tipado. Ejemplos de formalización de tipos abstractos de datos y algoritmos.
-    lunes 06/10: Metateoría: Normalización de System F. Ejemplos de formalización de matemática y estructuras algebraicas.
-    lunes 13/10: [Presentación TP] Metateoría: cubo de Barendregt y teoría de tipos de Martin-Löf. Formalización del cálculo-lambda simplemente tipado (1).
-    lunes 20/10: Repaso: tipos contráctiles, proposiciones, conjuntos, grupoides, etc. n-Types, Truncamientos. Formalización del cálculo-lambda simplemente tipado (2).
-    lunes 27/10: Equivalencia entre nociones de equivalencia.
-    lunes 03/11: Tipos de datos inductivos, W-types, unicidad de tipos de datos inductivos.
-    lunes 10/11: [Entrega TP] Higher-inductive types.
-    lunes 17/11: Clase14 Técnicas de implementación de demostradores interactivos.
-    lunes 24/11 FERIADO: Día de la Soberanía Nacional
-    lunes 02/12 [Parcial]
-    lunes 09/12 [Recuperatorio]
+lunes 18/08: Juicios y proposiciones. Funciones y funciones dependientes. Pares y pares dependientes. Tipo vacío. Tipo producto. Universos. Introducción a la teoría de tipos de Martin-Löf y lógica en Agda.
+lunes 25/08:  Igualdad definicional vs. proposicional. Inducción en caminos. Recursión e inducción sobre números naturales. Razonamiento ecuacional.
+lunes 01/09: Propiedades de la igualdad: estructura de ω-grupoide. Transporte. Recursión e inducción sobre números naturales (continuación).
+Homotopía. Equivalencia de tipos. Axioma de univalencia. Recursión e inducción sobre tipos de datos inductivos.
+lunes 15/09: Tipos contráctiles, proposiciones, conjuntos, grupoides, etc. Predicados definidos inductivamente. Equivalencia de tipos.
+lunes 22/09: Metateoría: cálculo-lambda sin tipos. Confluencia. Lógica clásica. Equivalencia entre principios de razonamiento clásicos. Demostración de algunas equivalencias de tipos.
+lunes 29/09: Metateoría: Punto de vista de Curry-Howard y normalización del cálculo-lambda simplemente tipado. Ejemplos de formalización de tipos abstractos de datos y algoritmos.
+lunes 06/10: Metateoría: Normalización de System F. Ejemplos de formalización de matemática y estructuras algebraicas.
+lunes 13/10: [Presentación TP] Metateoría: cubo de Barendregt y teoría de tipos de Martin-Löf. Formalización del cálculo-lambda simplemente tipado (1).
+lunes 20/10: Repaso: tipos contráctiles, proposiciones, conjuntos, grupoides, etc. n-Types, Truncamientos. Formalización del cálculo-lambda simplemente tipado (2).
+lunes 27/10: Equivalencia entre nociones de equivalencia.
+lunes 03/11: Tipos de datos inductivos, W-types, unicidad de tipos de datos inductivos.
+lunes 10/11: [Entrega TP] Higher-inductive types.
+lunes 17/11: Clase14 Técnicas de implementación de demostradores interactivos.
+lunes 24/11 FERIADO: Día de la Soberanía Nacional
+lunes 02/12 [Parcial]
+lunes 09/12 [Recuperatorio]
 
