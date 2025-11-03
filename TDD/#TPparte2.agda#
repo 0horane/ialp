@@ -178,8 +178,6 @@ tempaux4 a b c = solve-ℤ (a ∷ b ∷ c ∷ [])
    ∑⟨ 1 ⦂ suc (suc n) ⟩ g ∎
 
 
--- HI : ((i : ℕ) → ¬ i ≡ 0 → f i ≡ g i) → f (suc n) + ∑⟨ n ⟩ f - f 0 ≡ g (suc n) + ∑⟨ n ⟩ g - g 0
-
 
 ∸doesNotBreaksumWith1Base : (n : ℕ) (x y : ℤ) ->
   ∑⟨ 1 ⦂ suc n ⟩ (λ i → y * (+ binom n (i ∸ 1) * x ^ (n ∸ (i ∸ 1)) * y ^ (i ∸ 1))) ≡
@@ -207,6 +205,7 @@ tempaux4 a b c = solve-ℤ (a ∷ b ∷ c ∷ [])
   {!!}
     ≡⟨ {!!} ⟩
   ∑⟨ 1 ⦂ suc (suc n) ⟩ (λ i →      + binom (suc n) (i ∸ 1) * x ^ (suc (suc n) ∸ i) * y ^ i) ∎
+  with auxλi≡ : λ i → y * (+ binom (suc n) (i ∸ 1) * x ^ (suc n ∸ (i ∸ 1)) * y ^ (i ∸ 1))
 {- IH
 
 binom n n * x ^ (suc n ∸ n) * (y * y ^ n) +
