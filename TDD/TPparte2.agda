@@ -180,6 +180,14 @@ a+k-k≡a a k =
     ≡⟨ +-identityʳ a ⟩
   a ∎ 
 
+a+k-a≡k : (a k : ℤ) ->  a + k - a ≡ k
+a+k-a≡k a k = 
+  a + k + (- a)
+    ≡⟨ cong (λ ■ → ■ + (- a)) (+-comm a k)  ⟩
+  k + a - a
+    ≡⟨ a+k-k≡a k a ⟩
+  k ∎
+
 -- la definicion con factorial usa division. por ahora lo quiero evitar. 
 binom : ℕ → ℕ → ℕ
 binom _ zero = 1
@@ -189,29 +197,54 @@ binom (suc n) (suc k) = binom n k +ℕ binom n (suc k)
 binom-sep : (n k : ℕ) -> + binom n k ≡ + binom (suc n) (suc k) - + binom n (suc k)
 binom-sep n k = sym (a+k-k≡a (+ binom n k) (+ binom n (suc k)))
 
+binom-sep-r : (n k : ℕ) -> + binom n (suc k) ≡ + binom (suc n) (suc k) - + binom n k
+binom-sep-r n k = sym (
+  + binom n k + + binom n (suc k) + (- + binom n k)
+    ≡⟨ cong (λ ■ → ■ + (- + binom n k)) (+-comm (+ binom n k) (+ binom n (suc k)))  ⟩
+  + binom n (suc k) + + binom n k + - (+ binom n k)
+    ≡⟨ a+k-k≡a (+ binom n (suc k)) (+ binom n k) ⟩
+  + binom n (suc k) ∎)
+
+
 binom-join : (n k : ℕ) -> ¬ k ≡ 0 -> + binom n k + + binom (n) (k ∸ 1) ≡ + binom (suc n) k
 binom-join n zero ¬0≡0 = ⊥-elim (¬0≡0 refl)
 binom-join n (suc k) _ = cong (λ ■ → + ■) (+-comm-ℕ (binom n (suc k)) (binom n k))
 
-∑-cong>0 : (f g : ℕ -> ℤ) (n : ℕ) -> ((i : ℕ) -> ¬ (i ≡ 0) -> f i ≡ g i) -> ∑⟨ 1 ⦂ suc n ⟩ f ≡ ∑⟨ 1 ⦂ suc n ⟩ g
-∑-cong>0 f g zero i≢0→f≡g =
-  f 1 + f 0 - f 0
-    ≡⟨ a+k-k≡a (f 1) (f 0) ⟩
-  f 1
-    ≡⟨ i≢0→f≡g (1) (λ ()) ⟩
-  g 1
-    ≡⟨ sym (a+k-k≡a (g 1) (g 0)) ⟩
-  ∑⟨ 1 ⦂ 1 ⟩ g ∎
+binnn≡1 : (n : ℕ) -> + binom n (suc n ∸ 1) ≡ + 1
+binnn≡1 zero = refl
+binnn≡1 (suc n) =
+  + binom n n + + binom n (suc n)
+    ≡⟨ cong (λ ■ → ■ + + binom n (suc n)) (binnn≡1 n) ⟩
+  + 1 + + binom n (suc n)
+    ≡⟨ {!!} ⟩
+  {!!} ∎
+
+binn1+n≡0 : (n : ℕ) -> + binom n (suc n) ≡ + 0
+binn1+n≡0 zero = refl
+binn1+n≡0 (suc n) =
+   + binom n (suc n) + + binom n (suc (suc n))
+    ≡⟨ cong (λ ■ → ■ + + binom n (suc (suc n))) (binn1+n≡0 n) ⟩
+  + binom n (suc (suc n))
+    ≡⟨ binom-sep-r n (suc n) ⟩
+  + binom (suc n) (suc (suc n)) - + binom n (suc n)
+    ≡⟨ {!!} ⟩
+  {!!}
+    ≡⟨ {!!} ⟩
+  {!!}∎
+
+
+∑-cong>0 : (f g : ℕ -> ℤ) (n : ℕ) -> ((i : ℕ) -> ¬ (i ≡ 0) -> f i ≡ g i) -> ∑⟨ 1 ⦂ n ⟩ f ≡ ∑⟨ 1 ⦂ n ⟩ g
+∑-cong>0 f g zero i≢0→f≡g = trans (n-n≡0 (f 0)) (sym (n-n≡0 (g 0)))
 ∑-cong>0 f g (suc n) i≢0→f≡g = 
-  f (suc (suc n)) + (f (suc n) + ∑⟨ n ⟩ f) - f 0 -- ∑⟨ 1 ⦂ suc (suc n) ⟩ f
-    ≡⟨ +-assoc (f (suc (suc n))) (f (suc n) + ∑⟨ n ⟩ f) (- f 0) ⟩
-  f (suc (suc n)) + (f (suc n) + ∑⟨ n ⟩ f - f 0)
-    ≡⟨ cong (_+_ (f (suc (suc n)))) (∑-cong>0 f g n i≢0→f≡g)  ⟩
-  f (suc (suc n)) + ∑⟨ 1 ⦂ suc n ⟩ g
-    ≡⟨ cong (λ ■ → ■ + ∑⟨ 1 ⦂ suc n ⟩ g) (i≢0→f≡g (suc (suc n)) 1+n≢0 ) ⟩
-  g (suc (suc n)) + ∑⟨ 1 ⦂ suc n ⟩ g
-    ≡⟨ sym (+-assoc (g (suc (suc n))) (g (suc n) + ∑⟨ n ⟩ g) (- ∑⟨ 0 ⟩ g)) ⟩
-   ∑⟨ 1 ⦂ suc (suc n) ⟩ g ∎
+  f (suc n) + (∑⟨ n ⟩ f) - f 0 -- ∑⟨ 1 ⦂ suc (suc n) ⟩ f
+    ≡⟨ +-assoc (f (suc n)) (∑⟨ n ⟩ f) (- f 0) ⟩
+  f (suc n) + (∑⟨ n ⟩ f - f 0)
+    ≡⟨ cong (_+_ (f (suc n))) (∑-cong>0 f g n i≢0→f≡g)  ⟩
+  f (suc n) + ∑⟨ 1 ⦂ n ⟩ g
+    ≡⟨ cong (λ ■ → ■ + ∑⟨ 1 ⦂ n ⟩ g) (i≢0→f≡g (suc n) 1+n≢0 ) ⟩
+  g (suc n) + ∑⟨ 1 ⦂ n ⟩ g
+    ≡⟨ sym (+-assoc (g (suc n)) ( ∑⟨ n ⟩ g) (- ∑⟨ 0 ⟩ g)) ⟩
+   ∑⟨ 1 ⦂ suc n ⟩ g ∎
 
 
 
@@ -225,7 +258,7 @@ commassocl x y z = trans (sym (*-assoc x y z)) (trans (cong (λ ■ → ■ * z)
   ∑-cong>0
       (λ i → y * (+ binom n (i ∸ 1) * x ^ (n ∸ (i ∸ 1)) * y ^ (i ∸ 1)))
       (λ i → + binom n (i ∸ 1) * x ^ (suc n ∸ i)   * y ^  i)
-      n
+      (suc n)
       ≢λi
       where ≢λi : (i : ℕ) → ¬ i ≡ 0 →
                   y * (+ binom n (i ∸ 1) * x ^ (n ∸ (i ∸ 1)) * y ^ (i ∸ 1)) ≡
@@ -278,16 +311,23 @@ binomialTheorem {x} {y} {suc n} =
      + binom n i * x ^ (suc n ∸ i) * y ^ i +
      + binom n (i ∸ 1) * x ^ (suc n ∸ i) * y ^ i)
     ≡⟨ *-distribʳ-+Ap ⟩
-   + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
-   + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n +
-   ∑⟨ 1 ⦂ n ⟩ (λ i → (+ binom n i + + binom n (i ∸ 1)) * x ^ (suc n ∸ i) * y ^ i)
+  + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
+  + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n +
+  ∑⟨ 1 ⦂ n ⟩ (λ i → (+ binom n i + + binom n (i ∸ 1)) * x ^ (suc n ∸ i) * y ^ i)
     ≡⟨ cong (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +    + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n)) (∑-cong>0
-                    {!(λ i → (+ binom n i + + binom n (i ∸ 1)) * x ^ (suc n ∸ i) * y ^ i)!}
-                    {!!}
-                    {!!}
-                    {!!}) ⟩
-  {!!}
-     ≡⟨ {!!} ⟩
+                    (λ i → (+ binom n i + + binom n (i ∸ 1)) * x ^ (suc n ∸ i) * y ^ i)
+                    (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)
+                    n
+                    (λ i i≢0 → cong (λ ■ → ■ * x ^ (suc n ∸ i) * y ^ i) (binom-join n i i≢0)))
+     ⟩
+  + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
+  + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n
+  + ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)
+    ≡⟨ +-assoc (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0) (+ binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n) (∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)) ⟩
+  + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
+  (+ binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n +
+  ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i))
+    ≡⟨ cong (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0)) (sym (∑-high 1 n {!(λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)!})) ⟩
   {!!}
     ≡⟨ {!!} ⟩
   
