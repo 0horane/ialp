@@ -2,7 +2,7 @@ open import Data.String using (String)
 open import Data.Bool using (Bool; true; false)
 open import Relation.Binary.PropositionalEquality using (_≡_)
 
-infix  60 _⊢_ _∋_
+infix  60 _⊢_ _∋_ 
 infixl 70 _,_
 
 -- El objetivo de esta parte del TP es demostrar que el sistema de
@@ -90,7 +90,8 @@ Inclusion Γ Δ = {A : Form} → Γ ∋ A → Δ ∋ A
 extender-inclusion : {Γ Δ : Ctx} {A : Form}
                    → Inclusion Γ Δ
                    → Inclusion (Γ , A) (Δ , A)
-extender-inclusion = ?
+extender-inclusion {Γ} {Δ} Inc zero = zero
+extender-inclusion {Γ} {Δ} Inc (suc Cont) = suc (Inc Cont)
 
 -- [Ejercicio 2]
 -- Demostrar la siguiente propiedad de debilitamiento (o weakening),
@@ -104,23 +105,24 @@ debilitamiento : {Γ Δ : Ctx} {A : Form}
                → Inclusion Γ Δ
                → Γ ⊢ A
                → Δ ⊢ A
-debilitamiento incl (AX x)      = {! !}
-debilitamiento incl (FALSE-e p) = {! !}
-debilitamiento incl (IMP-i p)   = {! !}
-debilitamiento incl (IMP-e p q) = {! !}
-debilitamiento incl (DNEG p)    = {! !}
+debilitamiento incl (AX x)      = AX (incl x)
+debilitamiento incl (FALSE-e p) = FALSE-e (debilitamiento incl p) 
+debilitamiento incl (IMP-i p)   = IMP-i (debilitamiento (extender-inclusion incl) (p)) 
+debilitamiento incl (IMP-e p q) = IMP-e (debilitamiento incl p) (debilitamiento incl q) 
+debilitamiento incl (DNEG p)    = DNEG (debilitamiento incl p) 
 
 -- Como caso particular de debilitamiento, se obtienen los siguientes lemas:
 
 wk : {Γ : Ctx} {A B : Form}
    → Γ ⊢ A
    → Γ , B ⊢ A
-wk = debilitamiento ?
+wk = debilitamiento λ x → suc x
+
 
 wk1 : {Γ : Ctx} {A B C : Form}
     → Γ , C ⊢ A
     → Γ , B , C ⊢ A
-wk1 = debilitamiento ?
+wk1 {Γ} {A} {B} {C} = debilitamiento (extender-inclusion {Γ} {Γ , B} {C} (λ x → suc x)) 
 
 -- [Ejercicio 3]
 -- Demostrar el siguiente lema de sustitución.
@@ -130,7 +132,7 @@ subst : {Γ : Ctx} {A B : Form}
       → Γ , A ⊢ B
       → Γ ⊢ A
       → Γ ⊢ B
-subst p q = ?
+subst p q = IMP-e (IMP-i p) q 
 
 -- [Ejercicio 4]
 -- Demostrar los siguientes principios de razonamiento clásicos.
@@ -141,14 +143,14 @@ subst p q = ?
 reductio-ad-absurdum : {Γ : Ctx} {A : Form}
                      → Γ , NOT A ⊢ FALSE
                      → Γ ⊢ A
-reductio-ad-absurdum p = ?
+reductio-ad-absurdum p = (IMP-e {!!} {!!})
 
 -- El principio de "consecuencia milagrosa" afirma que para demostrar Γ ⊢ A
 -- siempre alcanza con demostrar Γ , ¬A ⊢ A.
 consequentia-mirabilis : {Γ : Ctx} {A : Form}
                        → Γ , NOT A ⊢ A
                        → Γ ⊢ A
-consequentia-mirabilis p = ?
+consequentia-mirabilis p = {!!}
 
 -- [Ejercicio 5]
 -- Demostrar las siguientes reglas derivadas.
@@ -157,39 +159,39 @@ consequentia-mirabilis p = ?
 NOT-i : {Γ : Ctx} {A : Form}
       → Γ , A ⊢ FALSE
       → Γ ⊢ NOT A
-NOT-i p = ?
+NOT-i p = {!!}
 
 NOT-e : {Γ : Ctx} {A : Form}
       → Γ ⊢ NOT A
       → Γ ⊢ A
       → Γ ⊢ FALSE
-NOT-e p q = ?
+NOT-e p q = {!!}
 
 AND-i : {Γ : Ctx} {A B : Form}
       → Γ ⊢ A
       → Γ ⊢ B
       → Γ ⊢ AND A B
-AND-i p q = ?
+AND-i p q = {!!}
 
 AND-e1 : {Γ : Ctx} {A B : Form}
        → Γ ⊢ AND A B
        → Γ ⊢ A
-AND-e1 p = ?   -- Recordar que es posible razonar clásicamente usando DNEG.
+AND-e1 p = {!!}   -- Recordar que es posible razonar clásicamente usando DNEG.
 
 AND-e2 : {Γ : Ctx} {A B : Form}
        → Γ ⊢ AND A B
        → Γ ⊢ B
-AND-e2 p = ?
+AND-e2 p = {!!}
 
 OR-i1 : {Γ : Ctx} {A B : Form}
       → Γ ⊢ A
       → Γ ⊢ OR A B
-OR-i1 p = ?
+OR-i1 p = {!!}
 
 OR-i2 : {Γ : Ctx} {A B : Form}
       → Γ ⊢ B
       → Γ ⊢ OR A B
-OR-i2 p = ?
+OR-i2 p = {!!}
 
 -- El siguiente lema es un poco más difícil que los anteriores.
 -- Se sugiere usar la siguiente estructura:
@@ -205,11 +207,11 @@ OR-e : {Γ : Ctx} {A B C : Form}
      → Γ , A ⊢ C
      → Γ , B ⊢ C
      → Γ ⊢ C
-OR-e p q r = consequentia-mirabilis (subst (wk1 q) (reductio-ad-absurdum ?))
+OR-e p q r = consequentia-mirabilis (subst (wk1 q) (reductio-ad-absurdum {!!}))
 
 LEM : {Γ : Ctx} {A : Form}
     → Γ ⊢ OR A (NOT A)
-LEM = ?
+LEM = {!!}
 
 ---- Semántica bivaluada de la lógica proposicional ----
 
@@ -251,5 +253,5 @@ esSecuenteValido Γ A = ((v : Valuacion) → satisface v Γ A)
 deduccion-natural-correcta : {Γ : Ctx} {A : Form}
                            → Γ ⊢ A
                            → esSecuenteValido Γ A
-deduccion-natural-correcta = ?
+deduccion-natural-correcta = {!!}
 
