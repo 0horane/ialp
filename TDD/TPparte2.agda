@@ -4,11 +4,11 @@ open import Data.List using (List; []; _∷_)
 open import Data.Product using (_×_; Σ-syntax; _,_)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
 open import Data.Bool using (true; false)
-open import Data.Nat using (ℕ; zero; suc; _∸_; _!; _/_; NonZero; nonZero) renaming (_+_ to _+ℕ_; _*_ to _*ℕ_; _≤_ to _≤ℕ_)  
+open import Data.Nat using (ℕ; zero; suc; _∸_; _!; _/_; NonZero; nonZero; ≤-pred) renaming (_+_ to _+ℕ_; _*_ to _*ℕ_; _≤_ to _≤ℕ_)  
 open import Data.Integer using (1ℤ; ℤ; pos;  _+_; _≤_; _≟_; _≤?_; _*_; _-_; _^_; +_; -_) -- renaming (suc to ℤsuc)
-open import Data.Integer.Properties using (≤-step; ≤-refl; ≤-trans; +-monoʳ-≤; +-assoc; +-identityʳ; n⊖n≡0; +-comm; m-n≡m⊖n; +-identityˡ; *-distribˡ-+; *-distribʳ-+; neg-distribʳ-*; *-assoc; *-comm)
+open import Data.Integer.Properties using (≤-step; ≤-refl; ≤-trans; +-monoʳ-≤; +-assoc; +-identityʳ; n⊖n≡0; +-comm; m-n≡m⊖n; +-identityˡ; *-distribˡ-+; *-distribʳ-+; neg-distribʳ-*; *-assoc; *-comm) 
 -- open import Data.Nat.Properties renaming (≤-step; ≤-refl; ≤-trans; +-monoʳ-≤; +-assoc; +-identityʳ;)
-open import Data.Nat.Properties using (n∸n≡0; 1+n≢0; ∸-suc) renaming (+-assoc to +-assoc-ℕ; +-comm to +-comm-ℕ; +-identityʳ to +-identityʳ-ℕ; +-identityˡ to +-identityˡ-ℕ ; *-distribˡ-+ to  *-distribˡ-+-ℕ; m≤n⇒m≤1+n to m≤ℕn⇒m≤ℕ1+n; ≤-refl to ≤ℕ-refl)   
+open import Data.Nat.Properties using (n∸n≡0; 1+n≢0; ∸-suc) renaming (+-assoc to +-assoc-ℕ; +-comm to +-comm-ℕ; +-identityʳ to +-identityʳ-ℕ; +-identityˡ to +-identityˡ-ℕ ; *-distribˡ-+ to  *-distribˡ-+-ℕ; m≤n⇒m≤1+n to m≤ℕn⇒m≤ℕ1+n; ≤-refl to ≤ℕ-refl; ≤-trans to ≤ℕ-trans)   
 open import Relation.Nullary using (Dec; yes; no; ¬_; _because_; ofⁿ; ofʸ)
 import Relation.Binary.PropositionalEquality as Eq
 open Eq.≡-Reasoning
@@ -209,29 +209,17 @@ binom-sep-r n k = sym (
 binom-join : (n k : ℕ) -> ¬ k ≡ 0 -> + binom n k + + binom (n) (k ∸ 1) ≡ + binom (suc n) k
 binom-join n zero ¬0≡0 = ⊥-elim (¬0≡0 refl)
 binom-join n (suc k) _ = cong (λ ■ → + ■) (+-comm-ℕ (binom n (suc k)) (binom n k))
+ 
 
-binnn≡1 : (n : ℕ) -> + binom n (suc n ∸ 1) ≡ + 1
-binnn≡1 zero = refl
-binnn≡1 (suc n) =
-  + binom n n + + binom n (suc n)
-    ≡⟨ cong (λ ■ → ■ + + binom n (suc n)) (binnn≡1 n) ⟩
-  + 1 + + binom n (suc n)
-    ≡⟨ {!!} ⟩
-  {!!} ∎
-
-binn1+n≡0 : (n : ℕ) -> + binom n (suc n) ≡ + 0
-binn1+n≡0 zero = refl
-binn1+n≡0 (suc n) =
-   + binom n (suc n) + + binom n (suc (suc n))
-    ≡⟨ cong (λ ■ → ■ + + binom n (suc (suc n))) (binn1+n≡0 n) ⟩
-  + binom n (suc (suc n))
-    ≡⟨ binom-sep-r n (suc n) ⟩
-  + binom (suc n) (suc (suc n)) - + binom n (suc n)
-    ≡⟨ {!!} ⟩
-  {!!}
-    ≡⟨ {!!} ⟩
-  {!!}∎
-
+N<M→binomNM≡0 : (n m : ℕ) -> (n ≤ℕ m) -> + binom n (suc m) ≡ + 0
+N<M→binomNM≡0 zero zero p = refl
+N<M→binomNM≡0 zero (suc m) p = N<M→binomNM≡0 zero m _≤ℕ_.z≤n
+N<M→binomNM≡0 (suc n) (suc m) p = 
+   + binom n (suc m) + + binom n (suc (suc m))
+    ≡⟨ cong (λ ■ → ■ + + binom n (suc (suc m))) (N<M→binomNM≡0 n m (≤-pred p )) ⟩
+   + binom n (suc (suc m)) 
+    ≡⟨ N<M→binomNM≡0 n (suc m) (≤ℕ-trans (m≤ℕn⇒m≤ℕ1+n ≤ℕ-refl ) p) ⟩
+  + 0 ∎ 
 
 ∑-cong>0 : (f g : ℕ -> ℤ) (n : ℕ) -> ((i : ℕ) -> ¬ (i ≡ 0) -> f i ≡ g i) -> ∑⟨ 1 ⦂ n ⟩ f ≡ ∑⟨ 1 ⦂ n ⟩ g
 ∑-cong>0 f g zero i≢0→f≡g = trans (n-n≡0 (f 0)) (sym (n-n≡0 (g 0)))
@@ -325,17 +313,22 @@ binomialTheorem {x} {y} {suc n} =
   + ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)
     ≡⟨ +-assoc (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0) (+ binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n) (∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)) ⟩
   + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
-  (+ binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n +
+  (+ binom n n * x ^ (suc n ∸ suc n) * y ^ suc n +
   ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i))
-    ≡⟨ cong (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0)) (sym (∑-high 1 n {!(λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)!})) ⟩
-  {!!}
-    ≡⟨ {!!} ⟩
-  
-  + (binom n n +ℕ binom n (suc n)) * x ^ (n ∸ n) * (y * y ^ n) +
-      ∑⟨ n ⟩ (λ k → + binom (suc n) k * x ^ (suc n ∸ k) * y ^ k)
-    ≡⟨ refl ⟩
-    
-  ∑⟨ 0 ⦂ suc n ⟩ (λ k → + binom (suc n) k * x ^ (suc n ∸ k) * y ^ k) ∎
+    ≡⟨ cong (λ ■ → + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 + (■ * x ^ (suc n ∸ suc n) * y ^ suc n + ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i))) (trans (sym (+-identityʳ (+ binom n n) )) (cong (_+_ (+ binom n n)) (sym (N<M→binomNM≡0 n n ≤ℕ-refl)))) ⟩
+  + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
+  (+ (binom n n +ℕ binom n (suc n)) * x ^ (suc n ∸ suc n) * y ^ suc n +
+  ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i))
+    ≡⟨ cong (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0)) (sym (∑-high 1 n λ i →  + binom (suc n) i  * x ^ (suc n ∸ i) * y ^ i)) ⟩
+  + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
+  ∑⟨ 1 ⦂ suc n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)
+
+-- sym ∑-high : (1 n : ℕ) -> (f : ℕ → ℤ) -> f (suc n) + ∑⟨ 1 ⦂ n ⟩ f ≡ ∑⟨ 1 ⦂ suc n  ⟩ f 
+-- N<M→binomNM≡0 : (n m : ℕ) -> (n ≤ℕ m) -> + binom n (suc m) ≡ + 0
+
+
+    ≡⟨ sym (∑-low 0 (suc n) (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i))  ⟩
+  ∑⟨ 0 ⦂ suc n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i) ∎
   where
       inductiveHypothesis = cong (_*_ (x + y)) (binomialTheorem {x} {y} {n})
       
