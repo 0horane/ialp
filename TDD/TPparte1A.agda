@@ -143,14 +143,14 @@ subst p q = IMP-e (IMP-i p) q
 reductio-ad-absurdum : {Γ : Ctx} {A : Form}
                      → Γ , NOT A ⊢ FALSE
                      → Γ ⊢ A
-reductio-ad-absurdum p = (IMP-e {!!} {!!})
+reductio-ad-absurdum p = DNEG (IMP-i p) 
 
 -- El principio de "consecuencia milagrosa" afirma que para demostrar Γ ⊢ A
 -- siempre alcanza con demostrar Γ , ¬A ⊢ A.
 consequentia-mirabilis : {Γ : Ctx} {A : Form}
                        → Γ , NOT A ⊢ A
                        → Γ ⊢ A
-consequentia-mirabilis p = {!!}
+consequentia-mirabilis p = reductio-ad-absurdum (IMP-e (AX zero) p)
 
 -- [Ejercicio 5]
 -- Demostrar las siguientes reglas derivadas.
@@ -159,19 +159,19 @@ consequentia-mirabilis p = {!!}
 NOT-i : {Γ : Ctx} {A : Form}
       → Γ , A ⊢ FALSE
       → Γ ⊢ NOT A
-NOT-i p = {!!}
+NOT-i p = IMP-i p
 
 NOT-e : {Γ : Ctx} {A : Form}
       → Γ ⊢ NOT A
       → Γ ⊢ A
       → Γ ⊢ FALSE
-NOT-e p q = {!!}
+NOT-e p q = IMP-e p q
 
 AND-i : {Γ : Ctx} {A B : Form}
       → Γ ⊢ A
       → Γ ⊢ B
       → Γ ⊢ AND A B
-AND-i p q = {!!}
+AND-i p q = NOT-i (NOT-e (IMP-e (AX zero) (wk p)) (wk q))
 
 AND-e1 : {Γ : Ctx} {A B : Form}
        → Γ ⊢ AND A B
