@@ -1,6 +1,7 @@
 open import Data.String using (String)
 open import Data.Bool using (Bool; true; false)
 open import Relation.Binary.PropositionalEquality using (_≡_)
+open import Data.Empty using (⊥; ⊥-elim)
 
 infix  60 _⊢_ _∋_ 
 infixl 70 _,_
@@ -160,38 +161,40 @@ NOT-i : {Γ : Ctx} {A : Form}
       → Γ , A ⊢ FALSE
       → Γ ⊢ NOT A
 NOT-i p = IMP-i p
+NEG-i = NOT-i
 
 NOT-e : {Γ : Ctx} {A : Form}
       → Γ ⊢ NOT A
       → Γ ⊢ A
       → Γ ⊢ FALSE
 NOT-e p q = IMP-e p q
+NEG-e = NOT-e
 
 AND-i : {Γ : Ctx} {A B : Form}
       → Γ ⊢ A
       → Γ ⊢ B
       → Γ ⊢ AND A B
-AND-i p q = NOT-i (NOT-e (IMP-e (AX zero) (wk p)) (wk q))
+AND-i p q = NEG-i (NEG-e (IMP-e (AX zero) (wk p)) (wk q))
 
 AND-e1 : {Γ : Ctx} {A B : Form}
        → Γ ⊢ AND A B
        → Γ ⊢ A
-AND-e1 p = {!!}   -- Recordar que es posible razonar clásicamente usando DNEG.
+AND-e1 {_} {A} {B} p = DNEG (NEG-i (NEG-e (wk p) (IMP-i (FALSE-e (NEG-e (AX (suc zero)) (AX zero))))))   -- Recordar que es posible razonar clásicamente usando DNEG.
 
 AND-e2 : {Γ : Ctx} {A B : Form}
        → Γ ⊢ AND A B
        → Γ ⊢ B
-AND-e2 p = {!!}
+AND-e2 {_} {A} {B} p = DNEG (NOT-i (NOT-e (wk p) (IMP-i (NEG-i (NEG-e (AX (suc (suc zero))) (AX zero) )))))
 
 OR-i1 : {Γ : Ctx} {A B : Form}
       → Γ ⊢ A
       → Γ ⊢ OR A B
-OR-i1 p = {!!}
+OR-i1 p = IMP-i (FALSE-e (NEG-e (AX zero) (wk p)))
 
 OR-i2 : {Γ : Ctx} {A B : Form}
       → Γ ⊢ B
       → Γ ⊢ OR A B
-OR-i2 p = {!!}
+OR-i2 p = IMP-i (wk p)
 
 -- El siguiente lema es un poco más difícil que los anteriores.
 -- Se sugiere usar la siguiente estructura:
@@ -207,11 +210,11 @@ OR-e : {Γ : Ctx} {A B C : Form}
      → Γ , A ⊢ C
      → Γ , B ⊢ C
      → Γ ⊢ C
-OR-e p q r = consequentia-mirabilis (subst (wk1 q) (reductio-ad-absurdum {!!}))
+OR-e p q r = consequentia-mirabilis (subst (wk1 q) (reductio-ad-absurdum (NEG-e (NEG-i (NEG-e (AX (suc (suc zero))) (wk1 (wk1 r)))) (IMP-e (wk (wk p)) (AX zero)))))
 
 LEM : {Γ : Ctx} {A : Form}
     → Γ ⊢ OR A (NOT A)
-LEM = {!!}
+LEM = IMP-i (AX zero)
 
 ---- Semántica bivaluada de la lógica proposicional ----
 
@@ -250,8 +253,15 @@ esSecuenteValido Γ A = ((v : Valuacion) → satisface v Γ A)
 -- [Ejercicio 6]
 -- Demostrar que el sistema de deducción natural clásico es correcto
 -- con respecto a la semántica bivaluada.
+
+false≢true : false ≡ true -> ⊥
+false≢true ()
+
 deduccion-natural-correcta : {Γ : Ctx} {A : Form}
                            → Γ ⊢ A
                            → esSecuenteValido Γ A
-deduccion-natural-correcta = {!!}
-
+deduccion-natural-correcta {_} {A} (AX x) _ sat-ctx = sat-ctx x
+deduccion-natural-correcta (FALSE-e secuente) valuacion sat-ctx = ⊥-elim (false≢true (deduccion-natural-correcta secuente valuacion sat-ctx)) --esto funciona, pero cual era la manera correcta de hacer esto?
+deduccion-natural-correcta (IMP-i secuente) valuacion sat-ctx = {!!}
+deduccion-natural-correcta (IMP-e secuente secuente₁) valuacion sat-ctx = {!!}
+deduccion-natural-correcta (DNEG secuente) valuacion sat-ctx = {!!}
