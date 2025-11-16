@@ -76,10 +76,10 @@ data Expr : Set where
 -- Completar la función que evalúa una expresión.
 --
 evaluar : Memoria → Expr → ℕ
-evaluar M (e-const c)         = {!!}
-evaluar M (e-var x)           = {!!}
-evaluar M (e-unaria f e)      = {!!}
-evaluar M (e-binaria f e₁ e₂) = {!!}
+evaluar M (e-const c)         = c
+evaluar M (e-var x)           = valor M x
+evaluar M (e-unaria f e)      = f (evaluar M e)
+evaluar M (e-binaria f e₁ e₂) = f (evaluar M e₁) (evaluar M e₂)
 
 -- Un <programa> imperativo puede ser:
 --
