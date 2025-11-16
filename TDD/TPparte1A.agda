@@ -285,8 +285,8 @@ deduccion-natural-correcta {Γ} {A} (IMP-e {Γ} {B} secuente secuente₁) v sat-
         aux3 {A} {B} {v} SAB SA  with valor-Form v B
         ... | true = refl
         ... | false with valor-Form v A 
-        ... | true = {!SAB!}
-        ... | false = SA
+        ...     | true = {!SAB!}
+        ...     | false = SA
             
         aa : satisface-Form v (IMP B A)
         aa = deduccion-natural-correcta {Γ} {IMP B A} secuente v sat-ctx
