@@ -17,9 +17,6 @@ open import Data.Integer.Tactic.RingSolver renaming (solve to solve-ℤ)
 open import Tactic.Cong using (cong!)
 
 -- TODO
--- fix all lambdas to be the same symbol
--- extract long congs into wheres so you can see whats happening
--- see what parts can be redone better with ∑-cong
 -- see what things can be made implicit, probably the functions in ∑-cong and whatever takes ≡ as arg
 -- replace all the solve macros and manually do all the comms and assocs
 -- same argument order in the different ∑-congs
@@ -34,6 +31,10 @@ infixr 201 ∑⟨_⦂_⟩_
 ∑⟨ zero ⦂ b ⟩ f = ∑⟨ b ⟩ f
 ∑⟨ suc a ⦂ b ⟩ f = ∑⟨ b ⟩ f - ∑⟨ a ⟩ f
 
+-- defino esto porque los congs a veces son larguisimos y es dificil de ver que se esta aplicando en cada paso
+infixr 500 _＠_
+_＠_ : {A B : Set} {x y : A}  → x ≡ y → (f : A → B)  → f x ≡ f y 
+(_＠_ {A} {B} {x} {y} a b) = cong b {x} {y} a 
 
 
 ∑-high : (a b : ℕ) -> (f : ℕ → ℤ) -> ∑⟨ a ⦂ suc b  ⟩ f ≡ f (suc b) + ∑⟨ a ⦂ b ⟩ f
@@ -51,7 +52,7 @@ b-a≡c+[b-[c+a]] a b fa = solve-ℤ (a ∷ b ∷ fa ∷ [])
 ∑-low : (a b : ℕ) -> (f : ℕ → ℤ) -> ∑⟨ a ⦂  b ⟩ f ≡ f a + ∑⟨ suc a ⦂ b ⟩ f
 ∑-low zero b f = sym (
   f 0 + (∑⟨ b ⟩ f - f 0)
-    ≡⟨ cong (λ ■ → f 0 + ■) (+-comm (∑⟨ b ⟩ f) (- (f 0))) ⟩
+    ≡⟨ +-comm (∑⟨ b ⟩ f) (- (f 0)) ＠ (λ ■ → f 0 + ■) ⟩
   f 0 + (- f 0 + ∑⟨ b ⟩ f)
     ≡⟨ sym (+-assoc (f 0) (- f 0) (∑⟨ b ⟩ f)) ⟩
   (f 0 - f 0) + ∑⟨ b ⟩ f
@@ -75,9 +76,9 @@ b-a≡c+[b-[c+a]] a b fa = solve-ℤ (a ∷ b ∷ fa ∷ [])
 ∑-cong zero b f g fx≡gx = ∑0-cong b f g fx≡gx
 ∑-cong (suc a) b f g fx≡gx =
    ∑⟨ b ⟩ f - ( ∑⟨ a ⟩ f)
-    ≡⟨ cong (λ ■ → ∑⟨ b ⟩ f - ■) (∑0-cong a f g fx≡gx) ⟩
+    ≡⟨ (∑0-cong a f g fx≡gx) ＠ (λ ■ → ∑⟨ b ⟩ f - ■) ⟩
   ∑⟨ b ⟩ f - ∑⟨ a ⟩ g
-    ≡⟨ cong (λ ■ → ■ - ∑⟨ a ⟩ g) (∑0-cong b f g fx≡gx) ⟩
+    ≡⟨ (∑0-cong b f g fx≡gx) ＠ (λ ■ → ■ - ∑⟨ a ⟩ g)  ⟩
   ∑⟨ suc a ⦂ b ⟩ g
     ∎
 
@@ -90,8 +91,6 @@ b-a≡c+[b-[c+a]] a b fa = solve-ℤ (a ∷ b ∷ fa ∷ [])
     ≡⟨ cong (λ ■ → ■ + ∑⟨ a ⟩ g) (fx≡gx (suc a) (_≤ℕ_.s≤s ≤ℕ-refl)) ⟩
   ∑⟨ suc a ⟩ g ∎
 
-tempaux2 : (a b c d : ℤ) -> a - b + (c - d) ≡ (a + c) - (b + d)
-tempaux2 a b c d = solve-ℤ (a ∷ b ∷ c ∷ d ∷ [])
 
 ∑0+∑0≡∑0 : {c : ℕ} { f g : ℕ → ℤ } -> ∑⟨ c ⟩ f + ∑⟨ c ⟩ g  ≡  ∑⟨ c ⟩ (λ i → f i + g i)
 ∑0+∑0≡∑0 {zero} {f} {g} = refl
@@ -114,13 +113,17 @@ tempaux2 a b c d = solve-ℤ (a ∷ b ∷ c ∷ d ∷ [])
 ∑+∑≡∑ : (b c : ℕ) (f g : ℕ → ℤ ) -> ∑⟨ b ⦂ c ⟩ f + ∑⟨ b ⦂ c ⟩ g  ≡  ∑⟨ b ⦂ c ⟩ (λ i → f i + g i)
 ∑+∑≡∑ zero c f g = ∑0+∑0≡∑0 {c} {f} {g}
 ∑+∑≡∑ (suc b) c f g =
-    ∑⟨ c ⟩ f - ∑⟨ b ⟩ f + (∑⟨ c ⟩ g - ∑⟨ b ⟩ g)
-    ≡⟨ tempaux2 (∑⟨ c ⟩ f) ( ∑⟨ b ⟩ f)  (∑⟨ c ⟩ g) ( ∑⟨ b ⟩ g)  ⟩
+  ∑⟨ c ⟩ f - ∑⟨ b ⟩ f + (∑⟨ c ⟩ g - ∑⟨ b ⟩ g)
+    ≡⟨ rearranged  ⟩
   ∑⟨ c ⟩ f + ∑⟨ c ⟩ g - (∑⟨ b ⟩ f + ∑⟨ b ⟩ g)
     ≡⟨ cong (λ ■ → ■ - (∑⟨ b ⟩ f + ∑⟨ b ⟩ g)) (∑0+∑0≡∑0 {c} {f} {g}) ⟩
   ∑⟨ c ⟩ (λ i → f i + g i) - (∑⟨ b ⟩ f + ∑⟨ b ⟩ g)
     ≡⟨ cong (λ ■ → ∑⟨ c ⟩ (λ i → f i + g i) - ■) (∑0+∑0≡∑0 {b} {f} {g}) ⟩
-   ∑⟨ c ⟩ (λ i → f i + g i) - ∑⟨ b ⟩ (λ i → f i + g i) ∎
+  ∑⟨ c ⟩ (λ i → f i + g i) - ∑⟨ b ⟩ (λ i → f i + g i) ∎
+    where rearrange : (a b c d : ℤ) -> a - b + (c - d) ≡ (a + c) - (b + d)
+          rearrange a b c d = solve-ℤ (a ∷ b ∷ c ∷ d ∷ [])
+          rearranged = rearrange (∑⟨ c ⟩ f) ( ∑⟨ b ⟩ f)  (∑⟨ c ⟩ g) ( ∑⟨ b ⟩ g)
+
  
 
 n*∑0=∑0n* : {c : ℕ} {a : ℤ} { f : ℕ → ℤ } -> a * ∑⟨ c ⟩ f  ≡  ∑⟨ c ⟩ (λ i → a *  f i)
@@ -236,8 +239,6 @@ N<M→binomNM≡0 (suc n) (suc m) p =
 
 
 
-commassocl : (x y z : ℤ) -> x * (y * z) ≡ y * (x * z)
-commassocl x y z = trans (sym (*-assoc x y z)) (trans (cong (λ ■ → ■ * z) (*-comm x y)) (*-assoc y x z))
 
 ∸doesNotBreaksumWith1Base : (n : ℕ) (x y : ℤ) ->
   ∑⟨ 1 ⦂ suc n ⟩ (λ i → y * (+ binom n (i ∸ 1) * x ^ (n ∸ (i ∸ 1)) * y ^ (i ∸ 1))) ≡
@@ -248,12 +249,16 @@ commassocl x y z = trans (sym (*-assoc x y z)) (trans (cong (λ ■ → ■ * z)
       (λ i → + binom n (i ∸ 1) * x ^ (suc n ∸ i)   * y ^  i)
       (suc n)
       ≢λi
-      where ≢λi : (i : ℕ) → ¬ i ≡ 0 →
+      where
+            commassocl : (x y z : ℤ) -> x * (y * z) ≡ y * (x * z)
+            commassocl x y z = trans (sym (*-assoc x y z)) (trans (cong (λ ■ → ■ * z) (*-comm x y)) (*-assoc y x z))
+
+            ≢λi : (i : ℕ) → ¬ i ≡ 0 →
                   y * (+ binom n (i ∸ 1) * x ^ (n ∸ (i ∸ 1)) * y ^ (i ∸ 1)) ≡
                   + binom n (i ∸ 1) * x ^ (suc n ∸ i) * y ^ i
             ≢λi zero i≢0 = ⊥-elim (i≢0 refl)
             ≢λi (suc i) i≢0 = commassocl y (+ binom n (suc i ∸ 1) * x ^ (n ∸ (suc i ∸ 1))) (y ^ i) 
-
+      
 
 binomialTheorem : {x y : ℤ} {n : ℕ} -> (x + y) ^ n ≡ ∑⟨ 0 ⦂ n ⟩ λ k → (+ (binom n k)) * x ^ (n ∸ k) * y ^ k
 binomialTheorem {x} {y} {zero} = refl
@@ -275,7 +280,7 @@ binomialTheorem {x} {y} {suc n} =
      ≡⟨ ∸doesNotBreaksumWith1BaseAp ⟩
   ∑⟨ n ⟩ (λ i → x * (+ binom n i * x ^ (n ∸ i) * y ^ i)) +
   ∑⟨ 1 ⦂ suc n ⟩ (λ i → + binom n (i ∸ 1) * x ^ (suc n ∸ i) * y ^ i)
-    ≡⟨ cong (λ ■ → ■ + ∑⟨ 1 ⦂ suc n ⟩ (λ i → + binom n (i ∸ 1) * x ^ (suc n ∸ i) * y ^ i)) (∑x*y*x^z≡∑y*x^[1+z] n x y) ⟩
+    ≡⟨ (∑x*y*x^z≡∑y*x^[1+z] n x y) ＠ (λ ■ → ■ + ∑⟨ 1 ⦂ suc n ⟩ (λ i → + binom n (i ∸ 1) * x ^ (suc n ∸ i) * y ^ i))  ⟩
   ∑⟨ n ⟩ (λ i → + binom n i * x ^ (suc n ∸ i) * y ^ i) +
   ∑⟨ 1 ⦂ suc n ⟩ (λ i → + binom n (i ∸ 1) * x ^ (suc n ∸ i) * y ^ i)
     ≡⟨ ∑-lowAp ⟩
@@ -302,12 +307,7 @@ binomialTheorem {x} {y} {suc n} =
   + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
   + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n +
   ∑⟨ 1 ⦂ n ⟩ (λ i → (+ binom n i + + binom n (i ∸ 1)) * x ^ (suc n ∸ i) * y ^ i)
-    ≡⟨ cong (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +    + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n)) (∑-cong>0
-                    (λ i → (+ binom n i + + binom n (i ∸ 1)) * x ^ (suc n ∸ i) * y ^ i)
-                    (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)
-                    n
-                    (λ i i≢0 → cong (λ ■ → ■ * x ^ (suc n ∸ i) * y ^ i) (binom-join n i i≢0)))
-     ⟩
+    ≡⟨ binom-join-Ap ⟩
   + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
   + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n
   + ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)
@@ -315,11 +315,11 @@ binomialTheorem {x} {y} {suc n} =
   + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
   (+ binom n n * x ^ (suc n ∸ suc n) * y ^ suc n +
   ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i))
-    ≡⟨ cong (λ ■ → + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 + (■ * x ^ (suc n ∸ suc n) * y ^ suc n + ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i))) (trans (sym (+-identityʳ (+ binom n n) )) (cong (_+_ (+ binom n n)) (sym (N<M→binomNM≡0 n n ≤ℕ-refl)))) ⟩
+    ≡⟨ (trans (sym (+-identityʳ (+ binom n n) )) (cong (_+_ (+ binom n n)) (sym (N<M→binomNM≡0 n n ≤ℕ-refl)))) ＠  (λ ■ → + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 + (■ * x ^ (suc n ∸ suc n) * y ^ suc n + ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)))  ⟩
   + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
   (+ (binom n n +ℕ binom n (suc n)) * x ^ (suc n ∸ suc n) * y ^ suc n +
   ∑⟨ 1 ⦂ n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i))
-    ≡⟨ cong (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0)) (sym (∑-high 1 n λ i →  + binom (suc n) i  * x ^ (suc n ∸ i) * y ^ i)) ⟩
+    ≡⟨ (sym (∑-high 1 n λ i →  + binom (suc n) i  * x ^ (suc n ∸ i) * y ^ i)) ＠ (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0))  ⟩
   + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
   ∑⟨ 1 ⦂ suc n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)
 
@@ -390,7 +390,13 @@ binomialTheorem {x} {y} {suc n} =
         (+ binom n i + + binom n (i ∸ 1)) * (x ^ (suc n ∸ i) * y ^ i)
           ≡⟨ sym (*-assoc ((+ binom n i + + binom n (i ∸ 1))) (x ^ (suc n ∸ i)) (y ^ i)) ⟩
         (+ binom n i + + binom n (i ∸ 1)) * x ^ (suc n ∸ i) * y ^ i ∎))
-
+      
+      binom-join-Ap = cong (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +    + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n)) (∑-cong>0
+                       (λ i → (+ binom n i + + binom n (i ∸ 1)) * x ^ (suc n ∸ i) * y ^ i)
+                       (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)
+                        n
+                       (λ i i≢0 → cong (λ ■ → ■ * x ^ (suc n ∸ i) * y ^ i) (binom-join n i i≢0)))
+     
 -- record Prime
 
 -- fermatsLittleTheorem : {a : ℕ} {p : Prime} -> a ** p ≡[p] a
