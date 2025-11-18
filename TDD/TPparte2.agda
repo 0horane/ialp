@@ -7,7 +7,6 @@ open import Data.Bool using (true; false)
 open import Data.Nat using (ℕ; zero; suc; _∸_; _!; _/_; NonZero; nonZero; ≤-pred) renaming (_+_ to _+ℕ_; _*_ to _*ℕ_; _≤_ to _≤ℕ_)  
 open import Data.Integer using (1ℤ; ℤ; pos;  _+_; _≤_; _≟_; _≤?_; _*_; _-_; _^_; +_; -_) -- renaming (suc to ℤsuc)
 open import Data.Integer.Properties using (≤-step; ≤-refl; ≤-trans; +-monoʳ-≤; +-assoc; +-identityʳ; n⊖n≡0; +-comm; m-n≡m⊖n; +-identityˡ; *-distribˡ-+; *-distribʳ-+; neg-distribʳ-*; *-assoc; *-comm) 
--- open import Data.Nat.Properties renaming (≤-step; ≤-refl; ≤-trans; +-monoʳ-≤; +-assoc; +-identityʳ;)
 open import Data.Nat.Properties using (n∸n≡0; 1+n≢0; ∸-suc) renaming (+-assoc to +-assoc-ℕ; +-comm to +-comm-ℕ; +-identityʳ to +-identityʳ-ℕ; +-identityˡ to +-identityˡ-ℕ ; *-distribˡ-+ to  *-distribˡ-+-ℕ; m≤n⇒m≤1+n to m≤ℕn⇒m≤ℕ1+n; ≤-refl to ≤ℕ-refl; ≤-trans to ≤ℕ-trans)   
 open import Relation.Nullary using (Dec; yes; no; ¬_; _because_; ofⁿ; ofʸ)
 import Relation.Binary.PropositionalEquality as Eq
@@ -15,11 +14,6 @@ open Eq.≡-Reasoning
 open import Data.Nat.Tactic.RingSolver using (solve; solve-∀)
 open import Data.Integer.Tactic.RingSolver renaming (solve to solve-ℤ)
 open import Tactic.Cong using (cong!)
-
--- TODO
--- see what things can be made implicit, probably the functions in ∑-cong and whatever takes ≡ as arg
--- replace all the solve macros and manually do all the comms and assocs
--- same argument order in the different ∑-congs
 
 infixr 200 ∑⟨_⟩_
 ∑⟨_⟩_ :   ℕ -> (ℕ -> ℤ) -> ℤ  
@@ -63,30 +57,30 @@ b-a≡c+[b-[c+a]] a b fa = solve-ℤ (a ∷ b ∷ fa ∷ [])
 
 ∑-low (suc a) b f = b-a≡c+[b-[c+a]] (∑⟨ a ⟩ f) (∑⟨ b ⟩ f) (f (suc a))
 
-∑0-cong : (a : ℕ) (f g : ℕ → ℤ) -> ((x : ℕ) → f x ≡ g x) -> ∑⟨ a ⟩ f ≡ ∑⟨ a ⟩ g
-∑0-cong zero f g fx≡gx = fx≡gx 0
-∑0-cong (suc a) f g fx≡gx =
+∑0-cong : {f g : ℕ → ℤ} (a : ℕ)  -> ((x : ℕ) → f x ≡ g x) -> ∑⟨ a ⟩ f ≡ ∑⟨ a ⟩ g
+∑0-cong zero fx≡gx = fx≡gx 0
+∑0-cong {f} {g} (suc a) fx≡gx =
   f (suc a) + ∑⟨ a ⟩ f
-    ≡⟨ cong (_+_ (f (suc a))) (∑0-cong a f g fx≡gx) ⟩
+    ≡⟨ cong (_+_ (f (suc a))) (∑0-cong a fx≡gx) ⟩
   f (suc a) + ∑⟨ a ⟩ g
     ≡⟨ cong (λ ■ → ■ + ∑⟨ a ⟩ g) (fx≡gx (suc a)) ⟩
   ∑⟨ suc a ⟩ g ∎
 
-∑-cong : (a b : ℕ) (f g : ℕ → ℤ) -> ((x : ℕ) → f x ≡ g x) -> ∑⟨ a ⦂ b ⟩ f ≡ ∑⟨ a ⦂ b ⟩ g
-∑-cong zero b f g fx≡gx = ∑0-cong b f g fx≡gx
-∑-cong (suc a) b f g fx≡gx =
+∑-cong : {f g : ℕ → ℤ} (a b : ℕ) -> ((x : ℕ) → f x ≡ g x) -> ∑⟨ a ⦂ b ⟩ f ≡ ∑⟨ a ⦂ b ⟩ g
+∑-cong zero b fx≡gx = ∑0-cong b fx≡gx
+∑-cong {f} {g} (suc a) b fx≡gx =
    ∑⟨ b ⟩ f - ( ∑⟨ a ⟩ f)
-    ≡⟨ (∑0-cong a f g fx≡gx) ＠ (λ ■ → ∑⟨ b ⟩ f - ■) ⟩
+    ≡⟨ (∑0-cong a fx≡gx) ＠ (λ ■ → ∑⟨ b ⟩ f - ■) ⟩
   ∑⟨ b ⟩ f - ∑⟨ a ⟩ g
-    ≡⟨ (∑0-cong b f g fx≡gx) ＠ (λ ■ → ■ - ∑⟨ a ⟩ g)  ⟩
+    ≡⟨ (∑0-cong b fx≡gx) ＠ (λ ■ → ■ - ∑⟨ a ⟩ g)  ⟩
   ∑⟨ suc a ⦂ b ⟩ g
     ∎
 
-∑0-cong-i≤a : (a : ℕ) (f g : ℕ → ℤ) -> ((i : ℕ) → i ≤ℕ a → f i ≡ g i) -> ∑⟨ a ⟩ f ≡ ∑⟨ a ⟩ g
-∑0-cong-i≤a zero f g p = p 0 _≤ℕ_.z≤n
-∑0-cong-i≤a (suc a) f g fx≡gx =
+∑0-cong-i≤a : {f g : ℕ → ℤ} (a : ℕ)  -> ((i : ℕ) → i ≤ℕ a → f i ≡ g i) -> ∑⟨ a ⟩ f ≡ ∑⟨ a ⟩ g
+∑0-cong-i≤a zero p = p 0 _≤ℕ_.z≤n
+∑0-cong-i≤a {f} {g} (suc a) fx≡gx =
   f (suc a) + ∑⟨ a ⟩ f
-    ≡⟨ cong (_+_ (f (suc a))) (∑0-cong-i≤a a f g λ i x → fx≡gx i (m≤ℕn⇒m≤ℕ1+n x )) ⟩
+    ≡⟨ cong (_+_ (f (suc a))) (∑0-cong-i≤a a λ i x → fx≡gx i (m≤ℕn⇒m≤ℕ1+n x )) ⟩
   f (suc a) + ∑⟨ a ⟩ g
     ≡⟨ cong (λ ■ → ■ + ∑⟨ a ⟩ g) (fx≡gx (suc a) (_≤ℕ_.s≤s ≤ℕ-refl)) ⟩
   ∑⟨ suc a ⟩ g ∎
@@ -322,13 +316,9 @@ binomialTheorem {x} {y} {suc n} =
     ≡⟨ (sym (∑-high 1 n λ i →  + binom (suc n) i  * x ^ (suc n ∸ i) * y ^ i)) ＠ (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0))  ⟩
   + binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +
   ∑⟨ 1 ⦂ suc n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i)
-
--- sym ∑-high : (1 n : ℕ) -> (f : ℕ → ℤ) -> f (suc n) + ∑⟨ 1 ⦂ n ⟩ f ≡ ∑⟨ 1 ⦂ suc n  ⟩ f 
--- N<M→binomNM≡0 : (n m : ℕ) -> (n ≤ℕ m) -> + binom n (suc m) ≡ + 0
-
-
     ≡⟨ sym (∑-low 0 (suc n) (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i))  ⟩
   ∑⟨ 0 ⦂ suc n ⟩ (λ i → + binom (suc n) i * x ^ (suc n ∸ i) * y ^ i) ∎
+  
   where
       inductiveHypothesis = cong (_*_ (x + y)) (binomialTheorem {x} {y} {n})
       
@@ -371,13 +361,13 @@ binomialTheorem {x} {y} {suc n} =
         + binom n i * x ^ (suc n ∸ i) * y ^ i ∎
         
       ∑x*y*x^z≡∑y*x^[1+z] : (n : ℕ) (x y : ℤ) -> ∑⟨ n ⟩ (λ i → x * (+ binom n i * x ^ (n ∸ i) * y ^ i)) ≡ ∑⟨ n ⟩ (λ i → + binom n i * x ^ (suc n ∸ i) * y ^ i)
-      ∑x*y*x^z≡∑y*x^[1+z] n x y = ∑0-cong-i≤a n ((λ i → x * (+ binom n i * x ^ (n ∸ i) * y ^ i))) ((λ i → + binom n i * x ^ (suc n ∸ i) * y ^ i)) (x*y*x^z≡y*x^[1+z] x y n)
+      ∑x*y*x^z≡∑y*x^[1+z] n x y = ∑0-cong-i≤a n (x*y*x^z≡y*x^[1+z] x y n)
 
       ∑+∑≡∑Ap = cong (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +   + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n)) (∑+∑≡∑ 1 n (λ i → + binom n i * x ^ (suc n ∸ i) * y ^ i) (λ i → + binom n (i ∸ 1) * x ^ (suc n ∸ i) * y ^ i))
 
 
       -- perdon
-      *-distribʳ-+Ap = cong (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +   + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n)) (∑-cong 1 n (λ i → + binom n i * x ^ (suc n ∸ i) * y ^ i + + binom n (i ∸ 1) * x ^ (suc n ∸ i) * y ^ i) (λ i → (+ binom n i + + binom n (i ∸ 1)) * x ^ (suc n ∸ i) * y ^ i)
+      *-distribʳ-+Ap = cong (_+_ (+ binom n 0 * x ^ (suc n ∸ 0) * y ^ 0 +   + binom n (suc n ∸ 1) * x ^ (suc n ∸ suc n) * y ^ suc n)) (∑-cong 1 n  
         λ i → (+ binom n i * x ^ (suc n ∸ i) * y ^ i +
             + binom n (i ∸ 1) * x ^ (suc n ∸ i) * y ^ i
              ≡⟨ cong (_+_ (+ binom n i * x ^ (suc n ∸ i) * y ^ i)) (*-assoc (+ binom n (i ∸ 1)) (x ^ (suc n ∸ i)) (y ^ i)) ⟩
@@ -397,6 +387,3 @@ binomialTheorem {x} {y} {suc n} =
                         n
                        (λ i i≢0 → cong (λ ■ → ■ * x ^ (suc n ∸ i) * y ^ i) (binom-join n i i≢0)))
      
--- record Prime
-
--- fermatsLittleTheorem : {a : ℕ} {p : Prime} -> a ** p ≡[p] a

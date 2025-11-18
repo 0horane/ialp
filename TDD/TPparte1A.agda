@@ -1,8 +1,9 @@
 open import Data.String using (String)
 open import Data.Bool using (Bool; true; false)
 open import Data.Product renaming (_,_ to _,,_)
-open import Relation.Binary.PropositionalEquality using (_≡_; refl)
+open import Relation.Binary.PropositionalEquality using (_≡_; refl; trans; sym)
 open Relation.Binary.PropositionalEquality.≡-Reasoning
+open import Data.Sum using (_⊎_; inj₁; inj₂)
 
 open import Data.Empty using (⊥; ⊥-elim)
 
@@ -261,7 +262,9 @@ false≢true : false ≡ true -> ⊥
 false≢true ()
 
 
-
+decidir-bool : (a : Bool) -> (a ≡ true ⊎ a ≡ false)
+decidir-bool false = inj₂ refl
+decidir-bool true = inj₁ refl
 
 deduccion-natural-correcta : {Γ : Ctx} {A : Form}
                            → Γ ⊢ A
@@ -270,42 +273,26 @@ deduccion-natural-correcta {_} {A} (AX x) _ sat-ctx = sat-ctx x
 deduccion-natural-correcta (FALSE-e secuente) v sat-ctx = ⊥-elim (false≢true (deduccion-natural-correcta secuente v sat-ctx)) 
 
 deduccion-natural-correcta {Γ} {IMP A B} (IMP-i {Γ} {A} secuente) v sat-ctx
-    with valor-Form v A
-... | false = refl
-... | true = deduccion-natural-correcta secuente v λ {zero → 
-    valor-Form v A
-      ≡⟨ {!refl!} ⟩
-    true  ∎; (suc x) → sat-ctx x}
+    with decidir-bool (valor-Form v A)
+... | inj₁ a rewrite a = deduccion-natural-correcta secuente v λ {zero → a; (suc x) → sat-ctx x}
+... | inj₂ a rewrite a = refl
 
 deduccion-natural-correcta {Γ} {A} (IMP-e {Γ} {B} secuente secuente₁) v sat-ctx =  aux3 {B} {A}
     (deduccion-natural-correcta secuente v sat-ctx)
     (deduccion-natural-correcta secuente₁ v sat-ctx)
   where
         aux3 : ∀ {A B} → {v : Valuacion} → satisface-Form v (IMP A B) → satisface-Form v A  →  satisface-Form v  B
-        aux3 {A} {B} {v} SAB SA  with valor-Form v B
-        ... | true = refl
-        ... | false with valor-Form v A 
-        ...     | true = {!SAB!}
-        ...     | false = SA
-            
-        aa : satisface-Form v (IMP B A)
-        aa = deduccion-natural-correcta {Γ} {IMP B A} secuente v sat-ctx
-        bb : satisface-Form v B
-        bb = deduccion-natural-correcta {Γ} {B} secuente₁ v sat-ctx
+        aux3 {A} {B} {v} SAB SA  with decidir-bool (valor-Form v B)
+        
+        ... | inj₁ b = b
+        ... | inj₂ b with decidir-bool (valor-Form v A)
+        ...     | inj₂ a = ⊥-elim (false≢true (trans (sym a) SA)) 
+        ...     | inj₁ a rewrite a = SAB
+                
 
 deduccion-natural-correcta {_} {A} (DNEG secuente) v sat-ctx = aux2 {A} {v} (deduccion-natural-correcta secuente v sat-ctx)
   where aux2 : ∀ {A} → {v : Valuacion} → satisface-Form v (IMP (IMP A FALSE) FALSE)  →  satisface-Form v  A 
         aux2 {A} {v} big with valor-Form v A
         ... | true  = big
         ... | false = big
-
-
--- deduccion-natural-correcta {Γ} {A} {!!} valuacion sat-ctx
---(IMP-i  (wk secuente)) valuacion sat-ctx 
-
--- satisface-Ctx v Γ = ∀ {A : Form} → Γ ∋ A → satisface-Form v A
--- satisface-Form v A = (valor-Form v A ≡ true)
-
--- Goal:          {A : Form} → (Γ, A) ∋ A → valor-Form valuacion A ≡ true
--- sat-ctx : {A = A₁ : Form} → Γ ∋ A₁ →     valor-Form valuacion A₁ ≡ true
 
